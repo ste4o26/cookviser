@@ -1,0 +1,38 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 0.2em;
+    background-color: #fcc3a9;
+    width: 20em;
+    height: 23em;
+    overflow: hidden;
+}
+
+.card-header {
+    text-align: center;
+    width: 97%;
+}
+
+.card-image-container {
+    width: 98%;
+    height: 98%;
+    border: 2px solid #fcc3a9;
+    border-radius: 0.2em;
+}
+
+.card-image {
+    width: 100%;
+}
+
+.card-button {
+    border: none;
+    position: relative;
+    bottom: 11px;
+    padding: 0.5em;
+    text-decoration: none;
+    color: #000000;
+    background-color: #f5a682;
+    border-radius: 0.2em;
+}
+

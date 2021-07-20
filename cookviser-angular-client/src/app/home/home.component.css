@@ -1,0 +1,61 @@
+.home-articles {
+    display: flex;
+    flex-direction: column;
+}
+
+.home-articles h2 {
+    text-align: center;
+    color: #bf511f;
+}
+
+
+.home-intro {
+    width: 100%;
+    height: 27em;
+    position: relative;
+}
+
+.intro-img {
+    width: inherit;
+    position: absolute;
+    top: 0;
+}
+
+.intro-text {
+    font-size: 2em;
+    z-index: 1;
+    position: absolute;
+    left: 150px;
+    top: 140px;
+    line-height: 1.3em;
+}
+
+.cards-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.article-cards {
+    margin-top: 1em;
+    margin-bottom: 2em;
+}
+
+.users-container {
+    border-radius: 0.2em;
+    background-color: #ba727c;
+    display: flex;
+    align-items:center;
+    justify-content: space-evenly;
+    height: 18em;
+    width: 96%;
+    margin: auto;
+}
+
+.cuisines-container {
+    display: flex;
+    align-items: center;
+    width: 96%;
+    margin: auto;
+    border-radius: 0.2em;
+}

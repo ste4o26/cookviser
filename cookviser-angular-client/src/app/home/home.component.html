@@ -1,0 +1,40 @@
+<app-header></app-header>
+
+<main class="home-main">
+    <section class="home-intro">
+        <p class="intro-text">Explorer different kind of cuisines.<br>Shere what you have cook with others.</p>
+        <img class="intro-img"
+            src="https://res.cloudinary.com/ste4o26/image/upload/v1626636164/cookviser/cookviser1_p8a7ks.png"
+            alt="An Introduction image">
+    </section>
+
+    <article class="home-articles">
+        <article class="article-cards">
+            <h2>Todays Best</h2>
+            <article class="cards-container">
+                <app-recipe-card *ngFor='let currentRecipe of todaysBestRecipes' [recipe]="currentRecipe"></app-recipe-card>
+            </article>
+        </article>
+
+        <article class="article-cards">
+            <h2>Top Chefs</h2>
+            <article class="users-container">
+                <app-user-card></app-user-card>
+                <app-user-card></app-user-card>
+                <app-user-card></app-user-card>
+            </article>
+        </article>
+
+        <article class="article-cards">
+            <h2>Our Cuisinues</h2>
+            <article class="cuisines-container">
+                <app-cousinue-card></app-cousinue-card>
+                <app-cousinue-card></app-cousinue-card>
+                <app-cousinue-card></app-cousinue-card>
+                <app-cousinue-card></app-cousinue-card>
+            </article>
+        </article>
+    </article>
+</main>
+
+<app-footer></app-footer>

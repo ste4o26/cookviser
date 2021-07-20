@@ -1,0 +1,16 @@
+<article  (mouseenter)="mouseEnterHandler(contentElement)" (mouseleave)="mouseLeaveHandler(contentElement)" class="card">
+    <div class="card-image-container">
+        <img class="card-image" src="https://cdn4.vectorstock.com/i/1000x1000/92/93/chef-profile-avatar-icon-vector-10179293.jpg" alt="Profile picture">
+    </div>
+
+    <header class="card-header">
+        <!-- TOOD add the query params instead of hardcoding it!!! -->
+        <a routerLink="/user/profile?username=ste4o26">Ste4o26</a>
+        <p>Overall Rating: 4.5</p>
+    </header>
+    
+    <main #contentElement class="card-content hidden fas">
+        <h4>About me</h4>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil corporis mollitia rem eos id totam quasi velit quis voluptate praesentium ullam</p>
+    </main>
+</article>

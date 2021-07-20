@@ -1,0 +1,12 @@
+<article class="card" (mouseenter)="mouseEnterHandler(headerElement)" (mouseleave)="mouseLeaveHandler(headerElement)">
+    <div class="card-image-container">
+        <img class="card-image"
+            src="https://iamafoodblog.b-cdn.net/wp-content/uploads/2020/05/homemade-birria-tacos-recipe-3273w.jpg"
+            alt="Recipe Thumbnail">
+    </div>
+
+    <header #headerElement class="card-header hidden">
+        <h3>French</h3>
+        <a routerLink="/cuisines?name=french">View All</a>
+    </header>
+</article>

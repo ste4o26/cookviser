@@ -1,0 +1,32 @@
+<header class="site-header">
+    <h1 class="site-title">Cookviser</h1>
+
+    <nav class="site-nav">
+        <ul class="nav-list domain">
+            <li class="list-item">
+                <a routerLink="/home">Home</a>
+            </li>
+            <li class="list-item">
+                <a routerLink="/recipe/category">Categories</a>
+            </li>
+            <li *ngIf="isLogedIn" class="list-item">
+                <a routerLink="/recipe/add">Add Recipe</a>
+            </li>
+            <li class="list-item">
+                <a routerLink="/recipe/all">All Recipe</a>
+            </li>
+        </ul>
+
+        <ul class="nav-list auth">
+            <li *ngIf="!isLogedIn" class="list-item">
+                <a routerLink="/auth/login">Login</a>
+            </li>
+            <li *ngIf="!isLogedIn" class="list-item">
+                <a routerLink="/auth/register">Register</a>
+            </li>
+            <li *ngIf="isLogedIn" class="list-item">
+                <a routerLink="/auth/logout">Logout</a>
+            </li>
+        </ul>
+    </nav>
+</header>
