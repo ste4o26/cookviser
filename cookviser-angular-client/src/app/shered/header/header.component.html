@@ -9,11 +9,11 @@
             <li class="list-item">
                 <a routerLink="/recipe/category">Categories</a>
             </li>
-            <li *ngIf="isLogedIn" class="list-item">
-                <a routerLink="/recipe/add">Add Recipe</a>
-            </li>
             <li class="list-item">
                 <a routerLink="/recipe/all">All Recipe</a>
+            </li>
+            <li *ngIf="isLogedIn" class="list-item">
+                <a routerLink="/recipe/add">Add Recipe</a>
             </li>
         </ul>
 

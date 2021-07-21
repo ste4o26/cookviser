@@ -19,19 +19,14 @@
         <article class="article-cards">
             <h2>Top Chefs</h2>
             <article class="users-container">
-                <app-user-card></app-user-card>
-                <app-user-card></app-user-card>
-                <app-user-card></app-user-card>
+                <app-user-card *ngFor="let currentUser of bestChefs" [user]="currentUser" ></app-user-card>
             </article>
         </article>
 
         <article class="article-cards">
             <h2>Our Cuisinues</h2>
             <article class="cuisines-container">
-                <app-cousinue-card></app-cousinue-card>
-                <app-cousinue-card></app-cousinue-card>
-                <app-cousinue-card></app-cousinue-card>
-                <app-cousinue-card></app-cousinue-card>
+                <app-cousinue-card *ngFor="let currentCuisine of mostPopulatedCuisines" [cuisine]="currentCuisine"></app-cousinue-card>
             </article>
         </article>
     </article>

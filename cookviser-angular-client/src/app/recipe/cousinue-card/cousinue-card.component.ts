@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { ICuisine } from '../interface/cuisine.interface';
 
 @Component({
   selector: 'app-cousinue-card',
@@ -6,6 +7,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./cousinue-card.component.css']
 })
 export class CousinueCardComponent {
+
+  @Input()
+  public cuisine: ICuisine = { name: '', imageThumbnailUrl: '' };
 
   constructor() { }
 

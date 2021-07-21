@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { IUserCard } from '../user-card.interface';
 
 @Component({
   selector: 'app-user-card',
@@ -7,13 +8,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserCardComponent {
 
-  constructor() { }
+  @Input()
+  public user: IUserCard;
 
-  mouseEnterHandler(articleElement: HTMLElement): void{
+  public constructor() { 
+    this.user = {
+      username: '',
+      overallRating: 0,
+      profileImageUrl: '',
+      description: ''
+    }
+  }
+
+  public mouseEnterHandler(articleElement: HTMLElement): void {
     articleElement.classList.remove("hidden");
   }
 
-  mouseLeaveHandler(articleElement: HTMLElement): void{
+  public mouseLeaveHandler(articleElement: HTMLElement): void {
     articleElement.classList.add("hidden");
   }
 }
