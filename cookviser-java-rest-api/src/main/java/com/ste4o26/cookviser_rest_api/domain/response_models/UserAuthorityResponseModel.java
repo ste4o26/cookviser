@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class UserAuthorityResponseModel {
-    private AuthorityName authority;
+    private String authority;
 }

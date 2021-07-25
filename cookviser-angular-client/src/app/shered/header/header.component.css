@@ -9,6 +9,7 @@
 
 .site-header {
     background-color: #f0c48b;
+    /* margin-bottom: 2em; */
 }
 
 .site-title {
@@ -40,11 +41,19 @@
     width: max-content
 }
 
-.list-item:hover {
+.list-item:hover,
+.list-item .logout-button:hover {
     background-color: #edb061;
     color: #FFFFFF;
     border-radius: 0.2em;
     cursor: pointer;
+}
+
+.logout-button {
+    background-color: inherit;
+    border: none;
+    cursor: pointer;
+    width: 100%;
 }
 
 a {

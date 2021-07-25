@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class UserRegisterBindingModel {
     private String username;
     private String email;
+    private String description;
     private String password;
     private String confirmPassword;
 }

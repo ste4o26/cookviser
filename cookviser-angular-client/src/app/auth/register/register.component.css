@@ -1,0 +1,74 @@
+.register-main {
+    height: 45em;
+    background-image: url("https://res.cloudinary.com/ste4o26/image/upload/v1627162332/cookviser/register-removebg-preview_qocnzi.png");
+    background-repeat: no-repeat;
+    background-size: 60% 90%;
+    background-position:right;
+}
+
+.form-group {
+    border-radius: 0.2em;
+    background-color: #dbad79;
+    position: absolute;
+    top: 15em;
+    left: 17em;
+    height: 60%;
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.input-container {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    align-items: center;
+}
+
+.input-container .form-control {
+    box-sizing: border-box;
+    width: 90%;
+    margin-left: 0.5em;
+    border: none;
+    border-radius: 0.2em;
+    height: 2em;
+}
+
+.form-control:focus {
+    outline-width: 0;
+}
+
+.form-control.ng-touched.ng-invalid {
+    border: 3px solid #9e0b1a;
+}
+
+.form-control.ng-touched.ng-valid {
+    border: 3px solid #0c7849;
+}
+
+.form-group h2 {
+    margin: 0;
+    padding: 0.2em 0.5em;
+    border-bottom: 2px solid #c26b51;
+}
+
+.login-button {
+    border: none;
+    border-radius: 0.2em;
+    padding: 1em 2em;
+    cursor: pointer;
+    background-color: #e3c8aa;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.login-button.invalid {
+    cursor: not-allowed;
+}
+
+textarea {
+    min-height: 60px;
+    resize: none;
+}

@@ -7,10 +7,8 @@ import com.ste4o26.cookviser_rest_api.domain.service_models.UserServiceModel;
 import com.ste4o26.cookviser_rest_api.exceptions.EmailAlreadyExistsException;
 import com.ste4o26.cookviser_rest_api.exceptions.PasswordNotMatchException;
 import com.ste4o26.cookviser_rest_api.exceptions.UsernameAlreadyExistsException;
-import com.ste4o26.cookviser_rest_api.init.ErrorMessages;
 import com.ste4o26.cookviser_rest_api.services.interfaces.UserService;
 import com.ste4o26.cookviser_rest_api.utils.JWTUtil;
-import com.ste4o26.cookviser_rest_api.utils.JWTUtilImpl;
 import com.ste4o26.cookviser_rest_api.web.handlers.GlobalExceptionHandler;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +18,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.management.relation.RoleNotFoundException;
 
 import static com.ste4o26.cookviser_rest_api.init.ErrorMessages.PASSWORDS_NOT_MATCH;
 
+@CrossOrigin(origins = "http://localhost:4200", exposedHeaders = {"jwtToken"})
 @RestController
 @RequestMapping("/auth")
 public class AuthController extends GlobalExceptionHandler {

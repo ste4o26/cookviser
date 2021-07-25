@@ -25,7 +25,10 @@
                 <a routerLink="/auth/register">Register</a>
             </li>
             <li *ngIf="isLogedIn" class="list-item">
-                <a routerLink="/auth/logout">Logout</a>
+                <a routerLink="/user/profile">{{username}}</a>
+            </li>
+            <li *ngIf="isLogedIn" class="list-item">
+                <button class="logout-button" (click)="clickHandler()">Log Out</button>
             </li>
         </ul>
     </nav>

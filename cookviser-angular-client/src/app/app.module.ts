@@ -8,7 +8,9 @@ import { UserModule } from './user/user.module';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
-
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './interceptor/auth.interceptor';
+import { AuthModule } from './auth/auth.module';
 
 @NgModule({
   declarations: [
@@ -20,9 +22,11 @@ import { HomeComponent } from './home/home.component';
     AppRoutingModule,
     SheredModule,
     RecipeModule,
-    UserModule
+    UserModule,
+    AuthModule
   ],
-  providers: [],
+  // TODO check for multi property again!
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

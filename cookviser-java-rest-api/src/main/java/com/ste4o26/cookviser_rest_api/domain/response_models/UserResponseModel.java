@@ -14,6 +14,7 @@ import java.util.Set;
 public class UserResponseModel {
     private String username;
     private String email;
+    private String description;
     private UserRoleResponseModel role;
     private Set<UserAuthorityResponseModel> authorities;
     private Set<RecipeResponseModel> myRecipes;

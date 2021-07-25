@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Entity(name = "users")
@@ -19,6 +18,9 @@ public class UserEntity extends BaseEntity {
 
     @Column(name = "email", nullable = false, unique = true)
     private String email;
+
+    @Column(name = "description", columnDefinition = "TEXT", nullable = false)
+    private String description;
 
     @Column(name = "password", nullable = false)
     private String password;
