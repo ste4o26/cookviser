@@ -12,7 +12,7 @@ import { AuthService } from '../auth/auth.service';
 export class AuthInterceptor implements HttpInterceptor {
   private authService: AuthService;
 
-  public constructor(authService: AuthService) { 
+  public constructor(authService: AuthService) {
     this.authService = authService;
   }
 
@@ -28,7 +28,7 @@ export class AuthInterceptor implements HttpInterceptor {
     this.authService.loadToken();
     const token: string | null = this.authService.getToken();
 
-    const clonedRequest: HttpRequest<any> = request.clone({setHeaders: {Authorization: `Bearer ${token}`}});
+    const clonedRequest: HttpRequest<any> = request.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
     return next.handle(clonedRequest);
   }
 }

@@ -97,6 +97,25 @@
             <version>3.17.0</version>
         </dependency>
 
+
+        <!--Claudinary dependency-->
+        <dependency>
+            <groupId>com.cloudinary</groupId>
+            <artifactId>cloudinary</artifactId>
+            <version>1.0.14</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.cloudinary</groupId>
+            <artifactId>cloudinary-taglib</artifactId>
+            <version>1.14.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.cloudinary</groupId>
+            <artifactId>cloudinary-http44</artifactId>
+            <version>1.14.0</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/com.cloudinary/cloudinary-core -->
         <dependency>
             <groupId>com.cloudinary</groupId>
@@ -104,12 +123,13 @@
             <version>1.29.0</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.cloudinary/cloudinary-http44 -->
-        <dependency>
-            <groupId>com.cloudinary</groupId>
-            <artifactId>cloudinary-http44</artifactId>
-            <version>1.26.0</version>
-        </dependency>
+
+<!--        &lt;!&ndash; https://mvnrepository.com/artifact/com.cloudinary/cloudinary-http44 &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.cloudinary</groupId>-->
+<!--            <artifactId>cloudinary-http44</artifactId>-->
+<!--            <version>1.26.0</version>-->
+<!--        </dependency>-->
 
     </dependencies>
 

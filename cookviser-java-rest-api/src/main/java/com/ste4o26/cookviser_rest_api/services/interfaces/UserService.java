@@ -1,5 +1,6 @@
 package com.ste4o26.cookviser_rest_api.services.interfaces;
 
+import com.ste4o26.cookviser_rest_api.domain.service_models.RecipeServiceModel;
 import com.ste4o26.cookviser_rest_api.domain.service_models.UserServiceModel;
 import com.ste4o26.cookviser_rest_api.exceptions.*;
 
@@ -20,4 +21,5 @@ public interface UserService {
 
     UserServiceModel demote(UserServiceModel userServiceModel) throws DemotionDeniedException, RoleNotFoundException;
 
+    UserServiceModel addRecipeToMyRecipes(UserServiceModel publisher, RecipeServiceModel createdRecipe);
 }

@@ -1,12 +1,7 @@
 package com.ste4o26.cookviser_rest_api.domain.service_models;
 
-import com.ste4o26.cookviser_rest_api.domain.entities.RateEntity;
-import com.ste4o26.cookviser_rest_api.domain.entities.StepEntity;
-import com.ste4o26.cookviser_rest_api.domain.entities.UserEntity;
 import com.ste4o26.cookviser_rest_api.domain.entities.enums.CategoryName;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.modelmapper.ModelMapper;
 
 import java.time.LocalDateTime;
@@ -22,10 +17,14 @@ public class RecipeServiceModel extends BaseServiceModel {
     private String description;
     private String recipeThumbnail;
     private int portions;
-    private LocalDateTime duration;
+    private int duration;
     private CategoryName category;
-    private Set<String> ingredients;
+    private CuisineServiceModel cuisine;
+    private List<String> ingredients;
     private Set<StepServiceModel> steps;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private UserServiceModel publisher;
     private Set<UserServiceModel> cookedBy;
     private List<RateServiceModel> rates;

@@ -37,14 +37,13 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   public submitHandler(user: IUserRegister): void {
-    console.log(user);
-
     const register$: Subscription = this.authService
       .register(user)
       .subscribe((response: HttpResponse<IUser>) => {
         // TODO display some messages to the user! 
         this.router.navigateByUrl('/auth/login');
       }, (errorResponse: HttpErrorResponse) => console.log(errorResponse.error.message));
+      
     this.subscriptions.push(register$);
   }
 }

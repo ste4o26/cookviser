@@ -11,13 +11,13 @@ import java.util.Map;
 @Configuration
 public class ApplicationCloudConfiguration {
 
-    @Value("com.cloudinary.api_key")
+    @Value("${com.cloudinary.api_key}")
     private String apiKey;
 
-    @Value("com.cloudinary.api_secret")
+    @Value("${com.cloudinary.api_secret}")
     private String apiSecret;
 
-    @Value("com.cloudinary.cloud_name")
+    @Value("${com.cloudinary.cloud_name}")
     private String cloudName;
 
     @Bean
@@ -27,6 +27,7 @@ public class ApplicationCloudConfiguration {
         configurations.put("api_secret", this.apiSecret);
         configurations.put("cloud_name", this.cloudName);
 
+        int b = 5;
 
         return new Cloudinary(configurations);
     }

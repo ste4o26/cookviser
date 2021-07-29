@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpEvent, HttpParams, HttpRequest, HttpResponse } from '@angular/common/http';
 import { IRecipeCard } from '../interface/recipe-card.interface'
 import { Observable } from 'rxjs';
 import { of as observableOf } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { IRecipe } from '../interface/recipe.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -13,56 +14,67 @@ export class RecipeService {
   private host: string;
   private recipes: IRecipeCard[] = [
     {
-      id:'first',
+      id: 'first',
       title: 'Recipe 1',
       publisher: 'Publisher 1',
       imageThumbnailUrl: 'https://iamafoodblog.b-cdn.net/wp-content/uploads/2020/05/homemade-birria-tacos-recipe-3273w.jpg'
     },
     {
-      id:'second',
+      id: 'second',
       title: 'Recipe 2',
       publisher: 'Publisher 2',
       imageThumbnailUrl: 'https://iamafoodblog.b-cdn.net/wp-content/uploads/2020/05/homemade-birria-tacos-recipe-3273w.jpg'
     },
     {
-      id:'third',
+      id: 'third',
       title: 'Recipe 3',
       publisher: 'Publisher 3',
       imageThumbnailUrl: 'https://iamafoodblog.b-cdn.net/wp-content/uploads/2020/05/homemade-birria-tacos-recipe-3273w.jpg'
     },
     {
-      id:'fourht',
+      id: 'fourht',
       title: 'Recipe 4',
       publisher: 'Publisher 4',
       imageThumbnailUrl: 'https://iamafoodblog.b-cdn.net/wp-content/uploads/2020/05/homemade-birria-tacos-recipe-3273w.jpg'
     },
     {
-      id:'fifth',
+      id: 'fifth',
       title: 'Recipe 4',
       publisher: 'Publisher 4',
       imageThumbnailUrl: 'https://iamafoodblog.b-cdn.net/wp-content/uploads/2020/05/homemade-birria-tacos-recipe-3273w.jpg'
     },
     {
-      id:'sixth',
+      id: 'sixth',
       title: 'Recipe 4',
       publisher: 'Publisher 4',
       imageThumbnailUrl: 'https://iamafoodblog.b-cdn.net/wp-content/uploads/2020/05/homemade-birria-tacos-recipe-3273w.jpg'
     }
   ];
 
-  constructor(http: HttpClient) {
+  public constructor(http: HttpClient) {
     this.http = http;
     this.host = environment.domain.concat('/recipe');
   }
 
-  fetchTodaysBest(): Observable<IRecipeCard[]> {
-    return observableOf(this.recipes.slice(0, 4))
-    // return this.http.get<IRecipeCard[]>(`${this.host}/getTodaysBest`);
+  public fetchTodaysBest(): Observable<HttpResponse<IRecipeCard[]>> {
+    // return observableOf(this.recipes.slice(0, 4))
+    return this.http.get<HttpResponse<IRecipeCard[]>>(`${this.host}/todayBestFour`);
   }
 
-  fetchAll(): Observable<IRecipeCard[]> {
-    return observableOf(this.recipes);
-    // return this.http.get<IRecipeCard[]>(`${this.host}/getAll`);
+  public fetchAll(): Observable<HttpResponse<IRecipeCard[]>> {
+    // return observableOf(this.recipes);
+    return this.http.get<HttpResponse<IRecipeCard[]>>(`${this.host}/getAll`);
   }
 
+  public fetchAllCategories(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.host}/all-categories`);
+  }
+
+  public create(recipe: IRecipe): Observable<HttpResponse<IRecipe>> {
+    return this.http.post<IRecipe>(`${this.host}/create`, recipe, { observe: 'response' });
+  }
+
+  public uploadRecipeImage(formData: FormData): Observable<string> {
+    return this.http.post<string>(`${this.host}/upload-recipe-image`, formData);
+  }
 }

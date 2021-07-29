@@ -3,6 +3,7 @@ package com.ste4o26.cookviser_rest_api.services;
 import com.ste4o26.cookviser_rest_api.domain.entities.UserEntity;
 import com.ste4o26.cookviser_rest_api.domain.entities.enums.AuthorityName;
 import com.ste4o26.cookviser_rest_api.domain.entities.enums.RoleName;
+import com.ste4o26.cookviser_rest_api.domain.service_models.RecipeServiceModel;
 import com.ste4o26.cookviser_rest_api.domain.service_models.UserAuthorityServiceModel;
 import com.ste4o26.cookviser_rest_api.domain.service_models.UserRoleServiceModel;
 import com.ste4o26.cookviser_rest_api.domain.service_models.UserServiceModel;
@@ -183,6 +184,17 @@ public class UserServiceImpl implements UserService {
         UserEntity demotedUser = this.userRepository.saveAndFlush(userEntity);
 
         return this.modelMapper.map(demotedUser, UserServiceModel.class);
+    }
+
+    @Override
+    public UserServiceModel addRecipeToMyRecipes(UserServiceModel publisher, RecipeServiceModel createdRecipe) {
+        publisher.getMyRecipes().add(createdRecipe);
+
+        UserEntity userEntity = this.modelMapper.map(publisher, UserEntity.class);
+
+        UserEntity updatedUser = this.userRepository.saveAndFlush(userEntity);
+
+        return this.modelMapper.map(updatedUser, UserServiceModel.class);
     }
 
 

@@ -9,7 +9,7 @@ import { ICuisine } from '../interface/cuisine.interface';
 export class CousinueCardComponent {
 
   @Input()
-  public cuisine: ICuisine = { name: '', imageThumbnailUrl: '' };
+  public cuisine: ICuisine = {id: '', name: '', imageThumbnailUrl: '' };
 
   constructor() { }
 

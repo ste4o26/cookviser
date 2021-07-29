@@ -54,7 +54,7 @@
     border-bottom: 2px solid #c26b51;
 }
 
-.login-button {
+.register-button {
     border: none;
     border-radius: 0.2em;
     padding: 1em 2em;
@@ -64,7 +64,7 @@
     letter-spacing: 2px;
 }
 
-.login-button.invalid {
+.register-button.invalid {
     cursor: not-allowed;
 }
 

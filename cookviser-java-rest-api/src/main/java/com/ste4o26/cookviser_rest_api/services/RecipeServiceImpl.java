@@ -3,24 +3,26 @@ package com.ste4o26.cookviser_rest_api.services;
 import com.ste4o26.cookviser_rest_api.domain.entities.RecipeEntity;
 import com.ste4o26.cookviser_rest_api.domain.entities.enums.CategoryName;
 import com.ste4o26.cookviser_rest_api.domain.service_models.RecipeServiceModel;
+import com.ste4o26.cookviser_rest_api.domain.service_models.StepServiceModel;
 import com.ste4o26.cookviser_rest_api.domain.service_models.UserServiceModel;
-import com.ste4o26.cookviser_rest_api.exceptions.ImageNotPresentException;
 import com.ste4o26.cookviser_rest_api.exceptions.RecipeNotExistsException;
 import com.ste4o26.cookviser_rest_api.exceptions.SearchValueNotProvidedException;
 import com.ste4o26.cookviser_rest_api.exceptions.UserNotAuthenticatedException;
 import com.ste4o26.cookviser_rest_api.repositories.RecipeRepository;
 import com.ste4o26.cookviser_rest_api.services.interfaces.CloudService;
 import com.ste4o26.cookviser_rest_api.services.interfaces.RecipeService;
+import com.ste4o26.cookviser_rest_api.services.interfaces.StepService;
 import com.ste4o26.cookviser_rest_api.services.interfaces.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.ste4o26.cookviser_rest_api.init.ErrorMessages.*;
@@ -31,36 +33,35 @@ public class RecipeServiceImpl implements RecipeService {
     private final ModelMapper modelMapper;
     private final UserService userService;
     private final CloudService cloudService;
+    private final StepService stepService;
 
     @Autowired
-    public RecipeServiceImpl(RecipeRepository recipeRepository, ModelMapper modelMapper, UserService userService, CloudService cloudService) {
+    public RecipeServiceImpl(RecipeRepository recipeRepository, ModelMapper modelMapper, UserService userService, CloudService cloudService, StepService stepService) {
         this.recipeRepository = recipeRepository;
         this.modelMapper = modelMapper;
         this.userService = userService;
         this.cloudService = cloudService;
+        this.stepService = stepService;
     }
 
     @Override
-    public RecipeServiceModel persist(RecipeServiceModel recipeServiceModel, MultipartFile multipartFile, Principal principal)
-            throws UserNotAuthenticatedException, ImageNotPresentException {
+    public RecipeServiceModel persist(RecipeServiceModel recipeServiceModel, Principal principal)
+            throws UserNotAuthenticatedException {
         if (principal.getName() == null || principal.getName().trim().isEmpty()) {
             throw new UserNotAuthenticatedException(FORBIDDEN_MESSAGE);
         }
 
         UserServiceModel publisher = this.userService.fetchByUsername(principal.getName());
         recipeServiceModel.setPublisher(publisher);
+        recipeServiceModel.setRates(new ArrayList<>());
         recipeServiceModel.setCookedBy(new HashSet<>());
 
-        //TODO think about how to set the steps!!!
+        Set<StepServiceModel> createdSteps = recipeServiceModel.getSteps()
+                .stream()
+                .map(this.stepService::persist)
+                .collect(Collectors.toSet());
 
-        String imageThumbnailUrl;
-        try {
-            imageThumbnailUrl = this.cloudService.uploadImage(multipartFile);
-        } catch (IOException ioe) {
-            throw new ImageNotPresentException("Image is required!");
-        }
-
-        recipeServiceModel.setRecipeThumbnail(imageThumbnailUrl);
+        recipeServiceModel.setSteps(createdSteps);
 
         RecipeEntity recipeEntity = this.modelMapper.map(recipeServiceModel, RecipeEntity.class);
         RecipeEntity persisted = this.recipeRepository.saveAndFlush(recipeEntity);
@@ -126,6 +127,22 @@ public class RecipeServiceImpl implements RecipeService {
         return allOrderedByRates.stream()
                 .map(recipe -> this.modelMapper.map(recipe, RecipeServiceModel.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<RecipeServiceModel> fetchBestThreeOrderByRates() {
+        List<RecipeEntity> bestThreeOrderedByRates =
+                this.recipeRepository.findBestThreeOrderedByRates(PageRequest.of(0, 4));
+
+        return RecipeServiceModel.mapFrom(bestThreeOrderedByRates, this.modelMapper);
+    }
+
+    @Override
+    public RecipeServiceModel update(RecipeServiceModel recipeServiceModel) {
+        RecipeEntity recipeEntity = this.modelMapper.map(recipeServiceModel, RecipeEntity.class);
+        RecipeEntity updatedRecipe = this.recipeRepository.saveAndFlush(recipeEntity);
+
+        return this.modelMapper.map(updatedRecipe, RecipeServiceModel.class);
     }
 
 

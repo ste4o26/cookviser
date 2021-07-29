@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable, of as observableOf } from 'rxjs';
 import { ICuisine } from '../interface/cuisine.interface';
 import { environment } from 'src/environments/environment';
@@ -33,18 +33,18 @@ export class CuisineService {
     },
   ];
 
-  constructor(http: HttpClient) {
+  public constructor(http: HttpClient) {
     this.http = http;
     this.host = environment.domain.concat('/cuisine');
   }
 
-  fetchAll(): Observable<ICuisine[]> {
-    // return this.http.get<ICuisine[]>(`${this.host}/getAll`);
-    return observableOf(this.cuisines);
+  public fetchAll(): Observable<ICuisine[]> {
+    return this.http.get<ICuisine[]>(`${this.host}/all`);
+    // return observableOf(this.cuisines);
   }
 
-  fetchFisrtsThreeMostPopulated(): Observable<ICuisine[]>{
-    // return this.http.get<ICuisine[]>(`${this.host}/getFirstThreeMostPopulated`);
-    return observableOf(this.cuisines.slice(0, 3))
+  public fetchFisrtsThreeMostPopulated(): Observable<ICuisine[]> {
+    return this.http.get<ICuisine[]>(`${this.host}/firstThreeMostPopulated`);
+    // return observableOf(this.cuisines.slice(0, 3))
   }
 }

@@ -1,5 +1,6 @@
 package com.ste4o26.cookviser_rest_api.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -36,9 +37,11 @@ public class UserEntity extends BaseEntity {
     private Set<UserAuthorityEntity> authorities;
 
     //TODO may not be needed!
+    @JsonIgnore
     @OneToMany(targetEntity = RecipeEntity.class, mappedBy = "publisher", fetch = FetchType.EAGER)
     private Set<RecipeEntity> myRecipes;
 
+    @JsonIgnore
     @ManyToMany(targetEntity = RecipeEntity.class, fetch = FetchType.EAGER)
     @JoinTable(name = "users_cooked_recipes",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),

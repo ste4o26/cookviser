@@ -8,20 +8,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class RecipeResponseModel {
+    private String id;
     private String name;
     private String description;
     private String recipeThumbnail;
     private int portions;
-    private LocalDateTime duration;
+    private int duration;
     private CategoryName category;
-    private Set<String> ingredients;
-    private Set<StepEntity> step;
+    private List<String> ingredients;
+    private Set<StepResponseModel> step;
     private UserEntity publisher;
     private Set<UserEntity> cookedBy;
 }
