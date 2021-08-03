@@ -1,14 +1,14 @@
 <article class="card">
     <div class="card-image-container">
-        <img class="card-image" src={{recipe.imageThumbnailUrl}} alt="Recipe Thumbnail">
+        <img class="card-image" src={{recipe.recipeThumbnail}} alt="Recipe Thumbnail">
     </div>
 
     <header class="card-header">
-        <h3>{{recipe.title}}</h3>
-        <p>By: {{recipe.publisher}}</p>
+        <h3>{{recipe.name}}</h3>
+        <p>By: {{recipe.publisherUsername}}</p>
     </header>
 
-    <a routerLink="recipe/details/{{recipe.id}}" class="card-button">Let's Cook</a>
+    <a [routerLink]="['/recipe/details/', recipe.id]" class="card-button">Let's Cook</a>
 </article>
 
 <!-- TODO max characters for the title are 55!!! -->

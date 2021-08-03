@@ -55,11 +55,12 @@
 }
 
 .register-button {
+    margin-bottom: 0.5em;
     border: none;
     border-radius: 0.2em;
     padding: 1em 2em;
     cursor: pointer;
-    background-color: #e3c8aa;
+    background: linear-gradient(40deg, #FFCB9C, #f59477);
     text-transform: uppercase;
     letter-spacing: 2px;
 }

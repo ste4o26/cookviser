@@ -13,6 +13,7 @@
 
 .card-image {
     width: inherit;
+    height: 95%;
     border-radius: 0.2em;
 }
 

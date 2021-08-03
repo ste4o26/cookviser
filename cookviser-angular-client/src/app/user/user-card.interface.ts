@@ -1,6 +1,8 @@
+import { IRate } from "../recipe/interface/rate.interface";
+
 export interface IUserCard {
     username: string;
-    overallRating: number;
     profileImageUrl: string;
     description: string;
+    overallRating: number;
 }

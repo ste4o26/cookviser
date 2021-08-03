@@ -11,13 +11,18 @@ import { environment } from 'src/environments/environment';
 export class TestComponent implements OnInit {
   private file: File | null = null;
   private http: HttpClient;
-  // private file: any = File;
+  public count: any = 5;
 
   constructor(http: HttpClient) {
     this.http = http;
   }
 
   ngOnInit(): void {
+  }
+
+  onRateHandler(event: any){
+    console.log('old value: ', event.oldValue);
+    console.log('new value: ', event.newValue);
   }
 
   public fileSelectHandler(event: any): void {

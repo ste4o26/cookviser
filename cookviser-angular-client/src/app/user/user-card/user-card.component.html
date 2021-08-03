@@ -5,7 +5,7 @@
 
     <header class="card-header">
         <!-- TOOD add the query params instead of hardcoding it!!! -->
-        <a routerLink="/user/profile" [queryParams]="{username: user.username}">{{user.username}}</a>
+        <a [routerLink]="['/user/profile', user.username]">{{user.username}}</a>
         <p>Overall Rating: {{user.overallRating}}</p>
     </header>
     

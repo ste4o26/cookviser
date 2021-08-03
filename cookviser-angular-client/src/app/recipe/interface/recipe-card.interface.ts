@@ -1,6 +1,6 @@
 export interface IRecipeCard {
     id:string;
-    title: string;
-    publisher: string;
-    imageThumbnailUrl: string;
+    name: string;
+    publisherUsername: string;
+    recipeThumbnail: string;
 }

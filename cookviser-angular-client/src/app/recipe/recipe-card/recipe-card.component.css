@@ -16,13 +16,14 @@
 
 .card-image-container {
     width: 98%;
-    height: 98%;
+    height: 65%;
     border: 2px solid #fcc3a9;
     border-radius: 0.2em;
 }
 
 .card-image {
     width: 100%;
+    height: 100%;
 }
 
 .card-button {

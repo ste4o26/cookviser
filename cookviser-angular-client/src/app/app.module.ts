@@ -7,11 +7,11 @@ import { SheredModule } from './shered/shered.module'
 import { RecipeModule } from './recipe/recipe.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
-
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
-
 import { AuthInterceptor } from './interceptor/auth.interceptor';
+import { RatingModule } from 'ng-starrating';
+
 
 @NgModule({
   declarations: [
@@ -24,7 +24,8 @@ import { AuthInterceptor } from './interceptor/auth.interceptor';
     SheredModule,
     RecipeModule,
     UserModule,
-    AuthModule
+    AuthModule,
+    RatingModule
   ],
   // TODO check for multi property again!
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],

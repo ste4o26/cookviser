@@ -1,87 +1,62 @@
 <main class="create-recipe-main">
-    <!-- (ngSubmit)="submitHandler()" -->
     <form [formGroup]="createRecipeForm" class="form-group" enctype="multipart/form-data">
         <h2>Create Recipe</h2>
 
         <div class="input-container">
-            <span class="icon-wrapper">
-                <i class="fas fa-user"></i>
-            </span>
             <input formControlName="name" class="form-control" type="text" placeholder="Title">
         </div>
 
         <div class="input-container">
-            <span class="icon-wrapper">
-                <i class="fas fa-user"></i>
-            </span>
             <input formControlName="description" class="form-control" type="text" placeholder="Description">
         </div>
 
         <div class="input-container">
-            <span class="icon-wrapper">
-                <i class="fas fa-user"></i>
-            </span>
-            <input type="file" accept="image/*" class="form-control" name="recipeImage"
+            <label for="file-input" id="file-label">Select Image</label>
+            <input type="file" accept="image/*" class="form-control" name="recipeImage" id="file-input"
                 (change)="selectFileHandler($event)">
         </div>
 
         <div class="input-container">
-            <span class="icon-wrapper">
-                <i class="fas fa-user"></i>
-            </span>
             <input formControlName="portions" class="form-control" type="number" placeholder="Portions Quantity">
         </div>
 
         <div class="input-container">
-            <span class="icon-wrapper">
-                <i class="fas fa-user"></i>
-            </span>
             <input formControlName="duration" class="form-control" type="number" placeholder="Duration in minutes">
         </div>
 
-        <div class="input-container">
-            <span class="icon-wrapper">
-                <i class="fas fa-user"></i>
-            </span>
-            <select formControlName="category" id="categories">
-                <!-- <option value="Drinks">Drinks</option> -->
-                <option *ngFor="let category of categories" [ngValue]="category.toUpperCase()">{{category}}</option>
-            </select>
+        <div class="select-menus-container">
+            <div class="input-container">
+                <select formControlName="category" id="categories" class="form-control">
+                    <option value="" selected disabled >Select Category</option>
+                    <option *ngFor="let category of categories" [ngValue]="category.toUpperCase()">{{category}}</option>
+                </select>
+            </div>
+
+            <div class="input-container">
+                <select formControlName="cuisine" id="cuisines" class="form-control">
+                    <option value="" selected disabled>Select Cuisine</option>
+                    <option *ngFor="let cuisine of cuisines" [ngValue]="cuisine">{{cuisine.name}}</option>
+                </select>
+            </div>
         </div>
 
         <div class="input-container">
-            <span class="icon-wrapper">
-                <i class="fas fa-user"></i>
-            </span>
-            <select formControlName="cuisine" id="cuisines">
-                <!-- <option value="French">French</option> -->
-                <option *ngFor="let cuisine of cuisines" [ngValue]="cuisine">{{cuisine.name}}</option>
-            </select>
-        </div>
-
-        <div class="input-container">
-            <span class="icon-wrapper">
-                <i class="fas fa-user"></i>
-            </span>
-            <textarea formControlName="ingredients" cols="30" rows="10"
+            <textarea formControlName="ingredients"
                 placeholder="Please separate all the ingredients with ', '"></textarea>
         </div>
 
         <div class="input-container">
-            <span class="icon-wrapper">
-                <i class="fas fa-user"></i>
-            </span>
-
-            <!-- *ngIf="createRecipeForm.get('steps') !== null" -->
             <div class="steps-wrapper" formArrayName="steps">
-                <div class="steps-contianer" *ngFor="let step of createRecipeForm.get('steps')?.controls; let i = index" [formGroupName]="i">
-                    <p>{{step.number}}</p>
-                    <input placeholder="step" type="text" class="form-control" formControlName="content">
+                <div class="steps-container" *ngFor="let step of createRecipeForm.get('steps')?.controls; let i = index"
+                    [formGroupName]="i">
+                    <p>{{step.get('number').value}}</p>
+                    <input placeholder="Step description" type="text" class="form-control" formControlName="content">
                 </div>
             </div>
         </div>
 
         <button (click)="addStepHandler()" class="add-step-button">Add Step</button>
-        <button (click)="submitHandler()" [disabled]="createRecipeForm.invalid" class="create-recipe-button">Create Recipe</button>
+        <button (click)="submitHandler()" [disabled]="createRecipeForm.invalid" class="create-recipe-button">Create
+            Recipe</button>
     </form>
 </main>

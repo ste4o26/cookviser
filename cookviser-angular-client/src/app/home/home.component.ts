@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, pipe, Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators'
 
@@ -9,7 +9,7 @@ import { IRecipeCard } from '../recipe/interface/recipe-card.interface';
 import { ICuisine } from '../recipe/interface/cuisine.interface';
 import { IUserCard } from '../user/user-card.interface';
 import { UserService } from '../user/user.service';
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
@@ -17,35 +17,25 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  private recipeService: RecipeService;
-  private cuisineService: CuisineService;
-  private userService: UserService;
   private subscriptions: Subscription[];
 
-  public todaysBestRecipes: IRecipeCard[] | null;
-  public mostPopulatedCuisines: ICuisine[] | null;
-  public bestChefs: IUserCard[] | null;
+  public todaysBestRecipes: any = [];
+  public mostPopulatedCuisines: ICuisine[] = [];
+  public bestChefs: IUserCard[] = [];
 
-  public constructor(recipeService: RecipeService, cuisineService: CuisineService, userService: UserService) {
+  public constructor(private recipeService: RecipeService, private cuisineService: CuisineService, private userService: UserService) {
     this.recipeService = recipeService;
     this.cuisineService = cuisineService;
     this.userService = userService;
     this.subscriptions = [];
-
-    this.todaysBestRecipes = [];
-    this.mostPopulatedCuisines = [];
-    this.bestChefs = [];
   }
 
 
   private recipeSubsriber(): void {
     const recipes$: Subscription = this.recipeService
       .fetchTodaysBest()
-      .subscribe((response: HttpResponse<IRecipeCard[]>) => {
-        this.todaysBestRecipes = response.body;
-      }, (errorResponse: HttpErrorResponse) => {
-        console.log(errorResponse.error.message);
-      });
+      .pipe(map((data: IRecipeCard[]) => { this.todaysBestRecipes = data; }))
+      .subscribe();
 
     this.subscriptions.push(recipes$);
   }
@@ -53,9 +43,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private cuisineSubscriber(): void {
     const cuisines$: Subscription = this.cuisineService
       .fetchFisrtsThreeMostPopulated()
-      // .fetchAll()
       .subscribe((response: ICuisine[]) => {
-        console.log(response);
         const data = response;
 
         // @ts-ignore: Object is possibly 'null'.
@@ -71,16 +59,15 @@ export class HomeComponent implements OnInit, OnDestroy {
       }, (responseError: HttpErrorResponse) => {
         console.log(responseError.error.message);
       });
-
     this.subscriptions.push(cuisines$);
   }
 
   private userSubscriber(): void {
-    const chefs$: Subscription = this.userService.fetchBestThreeChefs()
-      .subscribe((repsonse: HttpResponse<IUserCard[]>) => {
-        this.bestChefs = repsonse.body;
-      }, (responseError: HttpErrorResponse) => {
-        console.log(responseError.error.message);
+    const chefs$: Subscription = this.userService
+      .fetchBestThreeChefs()
+      .subscribe((data: any) => {
+        console.log("user data: ", data)
+        this.bestChefs = data;
       });
 
     this.subscriptions.push(chefs$);

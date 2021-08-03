@@ -14,9 +14,9 @@ export class UserCardComponent {
   public constructor() { 
     this.user = {
       username: '',
-      overallRating: 0,
       profileImageUrl: '',
-      description: ''
+      description: '',
+      overallRating: 0
     }
   }
 

@@ -2,11 +2,11 @@
     <div class="card-image-container">
         <img class="card-image"
             src="{{cuisine.imageThumbnailUrl}}"
-            alt="Recipe Thumbnail">
+            alt="Cuisine Thumbnail">
     </div>
 
     <header #headerElement class="card-header hidden">
         <h3>{{cuisine.name}}</h3>
-        <a routerLink="/cuisine/all" [queryParams]="{name: cuisine.name}">View All</a>
+        <a [routerLink]="['/recipe/all', cuisine.name]">View Recipes</a>
     </header>
 </article>
