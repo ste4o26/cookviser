@@ -4,7 +4,6 @@ import com.ste4o26.cookviser_rest_api.domain.entities.enums.CategoryName;
 import lombok.*;
 import org.modelmapper.ModelMapper;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -20,14 +19,16 @@ public class RecipeServiceModel extends BaseServiceModel {
     private int duration;
     private CategoryName category;
     private CuisineServiceModel cuisine;
-    private List<String> ingredients;
+    private Set<String> ingredients;
     private Set<StepServiceModel> steps;
+    private Set<UserServiceModel> cookedBy;
+    private Set<RateServiceModel> rates;
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private UserServiceModel publisher;
-    private Set<UserServiceModel> cookedBy;
-    private List<RateServiceModel> rates;
+
+    private double overallRating;
 
     //    TODO validation constraints!
 

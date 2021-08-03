@@ -1,14 +1,8 @@
 package com.ste4o26.cookviser_rest_api.domain.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ste4o26.cookviser_rest_api.domain.entities.enums.CategoryName;
 import lombok.*;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 @Entity(name = "recipes")
@@ -56,8 +50,8 @@ public class RecipeEntity extends BaseEntity {
     @ManyToMany(targetEntity = UserEntity.class, mappedBy = "myCookedRecipes", fetch = FetchType.EAGER)
     private Set<UserEntity> cookedBy;
 
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @OneToMany(targetEntity = RateEntity.class, mappedBy = "recipe", fetch = FetchType.EAGER)
-    private List<RateEntity> rates;
-
-    //TODO Ratings, likes, dislikes!
+    private Set<RateEntity> rates;
 }

@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface CuisineService {
     List<CuisineServiceModel> fetchAll();
+
+    List<CuisineServiceModel> fetchFirstThreeMostPopulated();
 }

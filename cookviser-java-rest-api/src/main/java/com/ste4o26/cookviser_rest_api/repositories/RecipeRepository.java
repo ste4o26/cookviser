@@ -21,10 +21,4 @@ public interface RecipeRepository extends JpaRepository<RecipeEntity, String> {
             "ON r.id = ra.recipe.id " +
             "ORDER BY ra.rateValue")
     List<RecipeEntity> findAllOrderedByRates();
-
-    @Query("SELECT r From recipes AS r " +
-            "INNER JOIN rates AS ra " +
-            "ON r.id = ra.recipe.id " +
-            "ORDER BY ra.rateValue DESC")
-    List<RecipeEntity> findBestThreeOrderedByRates(Pageable pageable);
 }

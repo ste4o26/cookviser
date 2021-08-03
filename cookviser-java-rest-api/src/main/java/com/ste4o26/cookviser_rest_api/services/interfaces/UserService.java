@@ -6,6 +6,7 @@ import com.ste4o26.cookviser_rest_api.exceptions.*;
 
 import javax.management.relation.RoleNotFoundException;
 import java.security.Principal;
+import java.util.List;
 
 public interface UserService {
     UserServiceModel fetchByUsername(String username);
@@ -22,4 +23,9 @@ public interface UserService {
     UserServiceModel demote(UserServiceModel userServiceModel) throws DemotionDeniedException, RoleNotFoundException;
 
     UserServiceModel addRecipeToMyRecipes(UserServiceModel publisher, RecipeServiceModel createdRecipe);
+
+    List<UserServiceModel> fetchAll();
+
+    List<UserServiceModel> fetchBestThreeChefs();
+
 }

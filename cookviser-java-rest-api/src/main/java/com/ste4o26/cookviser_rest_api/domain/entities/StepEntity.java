@@ -17,8 +17,4 @@ public class StepEntity extends BaseEntity {
 
     @Column(name = "content", nullable = false, columnDefinition = "TEXT")
     private String content;
-
-//    @ManyToOne(targetEntity = RecipeEntity.class)
-//    @JoinColumn(name = "recipe_id", referencedColumnName = "id")
-//    private RecipeEntity recipe;
 }

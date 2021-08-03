@@ -9,17 +9,12 @@ import com.ste4o26.cookviser_rest_api.exceptions.RecipeNotExistsException;
 import com.ste4o26.cookviser_rest_api.exceptions.SearchValueNotProvidedException;
 import com.ste4o26.cookviser_rest_api.exceptions.UserNotAuthenticatedException;
 import com.ste4o26.cookviser_rest_api.repositories.RecipeRepository;
-import com.ste4o26.cookviser_rest_api.services.interfaces.CloudService;
-import com.ste4o26.cookviser_rest_api.services.interfaces.RecipeService;
-import com.ste4o26.cookviser_rest_api.services.interfaces.StepService;
-import com.ste4o26.cookviser_rest_api.services.interfaces.UserService;
+import com.ste4o26.cookviser_rest_api.services.interfaces.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -32,16 +27,16 @@ public class RecipeServiceImpl implements RecipeService {
     private final RecipeRepository recipeRepository;
     private final ModelMapper modelMapper;
     private final UserService userService;
-    private final CloudService cloudService;
     private final StepService stepService;
+    private final RateService rateService;
 
     @Autowired
-    public RecipeServiceImpl(RecipeRepository recipeRepository, ModelMapper modelMapper, UserService userService, CloudService cloudService, StepService stepService) {
+    public RecipeServiceImpl(RecipeRepository recipeRepository, ModelMapper modelMapper, UserService userService, StepService stepService, RateService rateService) {
         this.recipeRepository = recipeRepository;
         this.modelMapper = modelMapper;
         this.userService = userService;
-        this.cloudService = cloudService;
         this.stepService = stepService;
+        this.rateService = rateService;
     }
 
     @Override
@@ -53,7 +48,7 @@ public class RecipeServiceImpl implements RecipeService {
 
         UserServiceModel publisher = this.userService.fetchByUsername(principal.getName());
         recipeServiceModel.setPublisher(publisher);
-        recipeServiceModel.setRates(new ArrayList<>());
+        recipeServiceModel.setRates(new HashSet<>());
         recipeServiceModel.setCookedBy(new HashSet<>());
 
         Set<StepServiceModel> createdSteps = recipeServiceModel.getSteps()
@@ -103,7 +98,6 @@ public class RecipeServiceImpl implements RecipeService {
         return recipeServiceModel;
     }
 
-    //    TODO more validations!!!
     @Override
     public List<RecipeServiceModel> fetchAllContains(String searchValue) throws SearchValueNotProvidedException {
         if (searchValue == null || searchValue.trim().isEmpty()) {
@@ -130,11 +124,17 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public List<RecipeServiceModel> fetchBestThreeOrderByRates() {
-        List<RecipeEntity> bestThreeOrderedByRates =
-                this.recipeRepository.findBestThreeOrderedByRates(PageRequest.of(0, 4));
+    public List<RecipeServiceModel> fetchBestFourOrderByRates() {
+        List<RecipeServiceModel> allRecipes = this.fetchAll();
 
-        return RecipeServiceModel.mapFrom(bestThreeOrderedByRates, this.modelMapper);
+        for (RecipeServiceModel recipe : allRecipes) {
+            double currentRecipeOverallRating = this.rateService.calculateRecipeOverallRate(recipe);
+            recipe.setOverallRating(currentRecipeOverallRating);
+        }
+
+        return allRecipes.stream()
+                .sorted((first, second) -> (int) (second.getOverallRating() - first.getOverallRating()))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -143,6 +143,13 @@ public class RecipeServiceImpl implements RecipeService {
         RecipeEntity updatedRecipe = this.recipeRepository.saveAndFlush(recipeEntity);
 
         return this.modelMapper.map(updatedRecipe, RecipeServiceModel.class);
+    }
+
+    @Override
+    public List<RecipeServiceModel> fetchAll() {
+        List<RecipeEntity> allRecipes = this.recipeRepository.findAll();
+
+        return RecipeServiceModel.mapFrom(allRecipes, this.modelMapper);
     }
 
 

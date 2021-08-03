@@ -1,9 +1,7 @@
 package com.ste4o26.cookviser_rest_api.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -16,10 +14,14 @@ public class RateEntity extends BaseEntity {
     @Column(name = "rate_value")
     private int rateValue;
 
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @ManyToOne(targetEntity = UserEntity.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserEntity user;
 
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @ManyToOne(targetEntity = RecipeEntity.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "recipe_id", referencedColumnName = "id")
     private RecipeEntity recipe;

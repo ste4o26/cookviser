@@ -42,8 +42,14 @@ public class CuisineController {
         return new ResponseEntity<>(collect, OK);
     }
 
-    @GetMapping("/firstThreeMostPopulated")
+    @GetMapping("/first-three-most-populated")
     public ResponseEntity<List<CuisineResponseModel>> getFirstThreeMostPopulated() {
-        return new ResponseEntity<>(new ArrayList<CuisineResponseModel>(), OK);
+        List<CuisineServiceModel> firstThreeMostPopulated = this.cuisineService.fetchFirstThreeMostPopulated();
+
+        List<CuisineResponseModel> collect = firstThreeMostPopulated.stream()
+                .map(cuisineServiceModel -> this.modelMapper.map(cuisineServiceModel, CuisineResponseModel.class))
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(collect, OK);
     }
 }

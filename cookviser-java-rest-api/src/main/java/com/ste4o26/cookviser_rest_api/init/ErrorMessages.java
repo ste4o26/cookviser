@@ -16,4 +16,6 @@ public class ErrorMessages {
     public static final String ALREADY_GOT_HIGHEST_ROLE = "%s has already got the highest role!";
     public static final String ADMIN_CANNOT_BE_DEMOTED = "The ADMIN cannot be demoted! ";
     public static final String USER_CANNOT_BE_DEMOTED = "Regular users cannot be demoted!";
+    public static final String ROLE_NOT_EXISTS = "Role %s does not exists!";
+    public static final String IMAGE_NOT_UPLOADED = "Image was not uploaded successfully! Please try again.";
 }

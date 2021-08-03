@@ -11,6 +11,7 @@ import com.ste4o26.cookviser_rest_api.exceptions.*;
 import com.ste4o26.cookviser_rest_api.init.ErrorMessages;
 import com.ste4o26.cookviser_rest_api.repositories.UserRepository;
 import com.ste4o26.cookviser_rest_api.services.interfaces.AuthorityService;
+import com.ste4o26.cookviser_rest_api.services.interfaces.RateService;
 import com.ste4o26.cookviser_rest_api.services.interfaces.RoleService;
 import com.ste4o26.cookviser_rest_api.services.interfaces.UserService;
 import org.modelmapper.ModelMapper;
@@ -22,33 +23,35 @@ import org.springframework.stereotype.Service;
 
 import javax.management.relation.RoleNotFoundException;
 import java.security.Principal;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.ste4o26.cookviser_rest_api.domain.entities.enums.AuthorityName.*;
 import static com.ste4o26.cookviser_rest_api.domain.entities.enums.RoleName.*;
+import static com.ste4o26.cookviser_rest_api.init.DataInit.DEFAULT_PROFILE_IMAGE_URL;
 import static com.ste4o26.cookviser_rest_api.init.ErrorMessages.*;
 
 @Service
 public class UserServiceImpl implements UserService {
+
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final RoleService roleService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final AuthorityService authorityService;
+    private final RateService rateService;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
                            ModelMapper modelMapper,
                            RoleService roleService,
-                           BCryptPasswordEncoder bCryptPasswordEncoder, AuthorityService authorityService) {
+                           BCryptPasswordEncoder bCryptPasswordEncoder, AuthorityService authorityService, RateService rateService) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.roleService = roleService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.authorityService = authorityService;
+        this.rateService = rateService;
     }
 
     private void isNewUser(UserServiceModel userServiceModel) throws UsernameAlreadyExistsException, EmailAlreadyExistsException {
@@ -88,7 +91,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserServiceModel fetchByUsername(String username) {
-        //TODO make separate class for all the error messages and make custom exceptions as well!!!
         UserEntity userEntity = this.userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(String
                         .format(USERNAME_NOT_EXISTS, username)));
@@ -108,11 +110,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserServiceModel register(UserServiceModel userServiceModel)
             throws RoleNotFoundException, EmailAlreadyExistsException, UsernameAlreadyExistsException {
-        //        TODO look for a better validation of if it is existing user... ps i think this one is fine for now!
         this.isNewUser(userServiceModel);
 
+        userServiceModel.setProfileImageUrl(DEFAULT_PROFILE_IMAGE_URL);
         userServiceModel.setMyRecipes(new HashSet<>());
         userServiceModel.setMyCookedRecipes(new HashSet<>());
+        userServiceModel.setRates(new HashSet<>());
 
         if (this.userRepository.count() == 0) {
             this.giveRole(userServiceModel, ROLE_ADMIN);
@@ -124,6 +127,7 @@ public class UserServiceImpl implements UserService {
 
         UserEntity userEntity = this.modelMapper.map(userServiceModel, UserEntity.class);
         userEntity.setPassword(this.bCryptPasswordEncoder.encode(userServiceModel.getPassword()));
+
 
         UserEntity registeredUser = this.userRepository.saveAndFlush(userEntity);
 
@@ -153,7 +157,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserServiceModel promote(UserServiceModel userServiceModel) throws RoleNotFoundException, PromotionDeniedException {
-        if (userServiceModel.getRole().getRole().equals(ROLE_MODERATOR)) {
+        RoleName userRole = userServiceModel.getRole().getRole();
+        if (userRole.equals(ROLE_MODERATOR) || userRole.equals(ROLE_ADMIN)) {
             throw new PromotionDeniedException(String.format(ALREADY_GOT_HIGHEST_ROLE, userServiceModel.getUsername()));
         }
 
@@ -197,5 +202,26 @@ public class UserServiceImpl implements UserService {
         return this.modelMapper.map(updatedUser, UserServiceModel.class);
     }
 
+    @Override
+    public List<UserServiceModel> fetchAll() {
+        List<UserEntity> allUsers = this.userRepository.findAll();
 
+        return allUsers.stream()
+                .map(userEntity -> this.modelMapper.map(userEntity, UserServiceModel.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UserServiceModel> fetchBestThreeChefs() {
+        List<UserServiceModel> allUsers = this.fetchAll();
+
+        for (UserServiceModel user : allUsers) {
+            double currentUserOverallRating = this.rateService.calculateUserOverallRate(user);
+            user.setOverallRating(currentUserOverallRating);
+        }
+
+        return allUsers.stream()
+                .sorted((first, second) -> (int) (second.getOverallRating() - first.getOverallRating()))
+                .collect(Collectors.toList());
+    }
 }

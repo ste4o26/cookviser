@@ -1,9 +1,7 @@
 package com.ste4o26.cookviser_rest_api.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -20,6 +18,9 @@ public class UserEntity extends BaseEntity {
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
+    @Column(name = "profile_image_url", nullable = false)
+    private String profileImageUrl;
+
     @Column(name = "description", columnDefinition = "TEXT", nullable = false)
     private String description;
 
@@ -30,17 +31,22 @@ public class UserEntity extends BaseEntity {
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     private UserRoleEntity role;
 
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @ManyToMany(targetEntity = UserAuthorityEntity.class, fetch = FetchType.EAGER)
     @JoinTable(name = "users_authorities",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
     private Set<UserAuthorityEntity> authorities;
 
-    //TODO may not be needed!
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @JsonIgnore
     @OneToMany(targetEntity = RecipeEntity.class, mappedBy = "publisher", fetch = FetchType.EAGER)
     private Set<RecipeEntity> myRecipes;
 
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @JsonIgnore
     @ManyToMany(targetEntity = RecipeEntity.class, fetch = FetchType.EAGER)
     @JoinTable(name = "users_cooked_recipes",
@@ -48,6 +54,8 @@ public class UserEntity extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "recipe_id", referencedColumnName = "id"))
     private Set<RecipeEntity> myCookedRecipes;
 
-//    @OneToMany(targetEntity = RateEntity.class, mappedBy = "user")
-//    private List<RateEntity> rates;
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToMany(targetEntity = RateEntity.class, mappedBy = "user", fetch = FetchType.EAGER)
+    private Set<RateEntity> rates;
 }

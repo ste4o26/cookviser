@@ -27,7 +27,9 @@ public interface RecipeService {
 
     List<RecipeServiceModel> fetchAllSortedByRate();
 
-    List<RecipeServiceModel> fetchBestThreeOrderByRates();
+    List<RecipeServiceModel> fetchBestFourOrderByRates();
 
     RecipeServiceModel update(RecipeServiceModel recipeServiceModel);
+
+    List<RecipeServiceModel> fetchAll();
 }

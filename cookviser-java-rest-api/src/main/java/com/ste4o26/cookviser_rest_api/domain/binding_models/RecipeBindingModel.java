@@ -3,10 +3,7 @@ package com.ste4o26.cookviser_rest_api.domain.binding_models;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -14,6 +11,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Data
 public class RecipeBindingModel {
+    private String id;
     private String name;
     private String description;
     private int portions;
@@ -23,5 +21,4 @@ public class RecipeBindingModel {
     private List<String> ingredients;
     private Set<StepBindingModel> steps;
     private String publisher;
-//    private MultipartFile recipeImage;
 }

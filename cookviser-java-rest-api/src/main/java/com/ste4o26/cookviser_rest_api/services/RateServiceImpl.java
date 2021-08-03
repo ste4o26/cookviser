@@ -2,11 +2,15 @@ package com.ste4o26.cookviser_rest_api.services;
 
 import com.ste4o26.cookviser_rest_api.domain.entities.RateEntity;
 import com.ste4o26.cookviser_rest_api.domain.service_models.RateServiceModel;
+import com.ste4o26.cookviser_rest_api.domain.service_models.RecipeServiceModel;
+import com.ste4o26.cookviser_rest_api.domain.service_models.UserServiceModel;
 import com.ste4o26.cookviser_rest_api.repositories.RateRepository;
 import com.ste4o26.cookviser_rest_api.services.interfaces.RateService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class RateServiceImpl implements RateService {
@@ -22,9 +26,43 @@ public class RateServiceImpl implements RateService {
 
     @Override
     public RateServiceModel rate(RateServiceModel rateServiceModel) {
-        RateEntity rateEntity = this.modelMapper.map(rateServiceModel, RateEntity.class);
-        RateEntity persited = this.rateRepository.saveAndFlush(rateEntity);
+        String userId = rateServiceModel.getUser().getId();
+        String recipeId = rateServiceModel.getRecipe().getId();
+        Optional<RateEntity> oldRateOpt = this.rateRepository.findByUserIdAndRecipeId(userId, recipeId);
 
-        return this.modelMapper.map(persited, RateServiceModel.class);
+        RateEntity rateEntity;
+        if (oldRateOpt.isEmpty()) {
+            rateEntity = this.modelMapper.map(rateServiceModel, RateEntity.class);
+        } else {
+            rateEntity = oldRateOpt.get();
+            rateEntity.setRateValue(rateServiceModel.getRateValue());
+        }
+
+        RateEntity result = this.rateRepository.saveAndFlush(rateEntity);
+        return this.modelMapper.map(result, RateServiceModel.class);
+    }
+
+    @Override
+    public double calculateUserOverallRate(UserServiceModel user) {
+        double overallRate = 0.0;
+        int totalRateSum = 0;
+        for (RecipeServiceModel recipe : user.getMyRecipes()) {
+            for (RateServiceModel rate : recipe.getRates()) {
+                totalRateSum += rate.getRateValue();
+            }
+            overallRate = (double) totalRateSum / recipe.getRates().size();
+        }
+
+        return overallRate;
+    }
+
+    @Override
+    public double calculateRecipeOverallRate(RecipeServiceModel recipe) {
+        int totalRateSum = 0;
+        for (RateServiceModel rate : recipe.getRates()) {
+            totalRateSum += rate.getRateValue();
+        }
+
+        return (double) totalRateSum / recipe.getRates().size();
     }
 }

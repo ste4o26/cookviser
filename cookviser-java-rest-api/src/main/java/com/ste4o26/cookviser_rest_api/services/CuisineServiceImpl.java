@@ -6,6 +6,8 @@ import com.ste4o26.cookviser_rest_api.repositories.CuisineRepository;
 import com.ste4o26.cookviser_rest_api.services.interfaces.CuisineService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +30,16 @@ public class CuisineServiceImpl implements CuisineService {
 
         return allCuisines.stream()
                 .map(cuisineEntity -> this.modelMapper.map(cuisineEntity, CuisineServiceModel.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CuisineServiceModel> fetchFirstThreeMostPopulated() {
+        List<CuisineEntity> firstThreeMostPopulated =
+                this.cuisineRepository.findFirstThreeMostPopulated(PageRequest.of(0, 3));
+
+        return firstThreeMostPopulated.stream()
+                .map(cuisineEntity ->  this.modelMapper.map(cuisineEntity, CuisineServiceModel.class))
                 .collect(Collectors.toList());
     }
 }
