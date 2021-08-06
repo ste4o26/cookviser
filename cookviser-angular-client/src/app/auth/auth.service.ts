@@ -6,23 +6,22 @@ import { IUserLogin } from './interface/user-login.interface';
 import { Observable } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { IUser } from './interface/user.interface';
+import { Router } from '@angular/router';
+import { AuthGuard } from '../guard/auth.guard';
+import { NotificationService } from '../shered/notification.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private http: HttpClient;
-  private token: string | null;
-  private loggedInUsername: string | null;
+  private token: string = '';
+  private loggedInUsername: string = '';
   private jwtHelperService: JwtHelperService;
-  public host: string;
 
-  public constructor(http: HttpClient) {
-    this.http = http;
-    this.token = null;
-    this.loggedInUsername = null;
-    this.jwtHelperService = new JwtHelperService;
-    this.host = environment.domain.concat('/auth');
+  public host: string = environment.domain.concat('/auth');
+
+  public constructor(private http: HttpClient) {
+    this.jwtHelperService = new JwtHelperService();
   }
 
   public setUserToken(token: string): void {
@@ -36,14 +35,20 @@ export class AuthService {
   }
 
   public loadToken(): void {
-    this.token = localStorage.getItem('jwtToken');
+    const tempToken = localStorage.getItem('jwtToken');
+    if(tempToken === null) {
+      this.token = '';
+      return;
+    }
+
+    this.token = tempToken;
   }
 
-  public getToken(): string | null {
+  public getToken(): string {
     return this.token;
   }
 
-  public getLoggedInUsername(): string | null {
+  public getLoggedInUsername(): string {
     return this.loggedInUsername;
   }
 
@@ -72,10 +77,10 @@ export class AuthService {
   }
 
   public logout(): void {
-    this.token = null;
+    this.token = '';
     localStorage.removeItem('jwtToken')
 
-    this.loggedInUsername = null;
+    this.loggedInUsername = '';
     localStorage.removeItem('loggedInUsername');
   }
 }

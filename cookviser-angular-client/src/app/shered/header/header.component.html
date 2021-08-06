@@ -7,7 +7,7 @@
                 <a routerLink="/home">Home</a>
             </li>
             <li class="list-item">
-                <a routerLink="/cuisine/all">Cuisines</a>
+                <a routerLink="/cuisine/all">All Cuisines</a>
             </li>
             <li class="list-item">
                 <a routerLink="/recipe/all">All Recipe</a>
@@ -28,7 +28,7 @@
                 <a [routerLink]="['/user/profile', username]">{{username}}</a>
             </li>
             <li *ngIf="isLogedIn" class="list-item">
-                <button class="logout-button" (click)="clickHandler()">Log Out</button>
+                <button routerLink="auth/login" class="logout-button" (click)="clickHandler()">Log Out</button>
             </li>
         </ul>
     </nav>

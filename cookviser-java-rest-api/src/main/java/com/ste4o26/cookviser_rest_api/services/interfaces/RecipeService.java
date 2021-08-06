@@ -1,6 +1,7 @@
 package com.ste4o26.cookviser_rest_api.services.interfaces;
 
 import com.ste4o26.cookviser_rest_api.domain.entities.enums.CategoryName;
+import com.ste4o26.cookviser_rest_api.domain.service_models.CuisineServiceModel;
 import com.ste4o26.cookviser_rest_api.domain.service_models.RecipeServiceModel;
 import com.ste4o26.cookviser_rest_api.exceptions.ImageNotPresentException;
 import com.ste4o26.cookviser_rest_api.exceptions.RecipeNotExistsException;
@@ -32,4 +33,8 @@ public interface RecipeService {
     RecipeServiceModel update(RecipeServiceModel recipeServiceModel);
 
     List<RecipeServiceModel> fetchAll();
+
+    List<RecipeServiceModel> fetchNextByCuisine(CuisineServiceModel cuisine, Integer recipesCount);
+
+    List<RecipeServiceModel> fetchNextRecipes(Integer recipesCount);
 }

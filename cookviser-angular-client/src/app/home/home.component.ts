@@ -10,6 +10,7 @@ import { ICuisine } from '../recipe/interface/cuisine.interface';
 import { IUserCard } from '../user/user-card.interface';
 import { UserService } from '../user/user.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { NotificationService } from '../shered/notification.service';
 
 @Component({
   selector: 'app-home',
@@ -17,25 +18,23 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  private subscriptions: Subscription[];
+  private subscriptions: Subscription[] = [];
 
   public todaysBestRecipes: any = [];
   public mostPopulatedCuisines: ICuisine[] = [];
   public bestChefs: IUserCard[] = [];
 
-  public constructor(private recipeService: RecipeService, private cuisineService: CuisineService, private userService: UserService) {
-    this.recipeService = recipeService;
-    this.cuisineService = cuisineService;
-    this.userService = userService;
-    this.subscriptions = [];
-  }
+  public constructor(private recipeService: RecipeService,
+    private cuisineService: CuisineService,
+    private userService: UserService,
+    private notificationService: NotificationService) { }
 
 
   private recipeSubsriber(): void {
     const recipes$: Subscription = this.recipeService
       .fetchTodaysBest()
-      .pipe(map((data: IRecipeCard[]) => { this.todaysBestRecipes = data; }))
-      .subscribe();
+      .subscribe((data: IRecipeCard[]) => this.todaysBestRecipes = data,
+        (errorResponse: HttpErrorResponse) => this.notificationService.showError(errorResponse.error.message));
 
     this.subscriptions.push(recipes$);
   }
@@ -43,32 +42,17 @@ export class HomeComponent implements OnInit, OnDestroy {
   private cuisineSubscriber(): void {
     const cuisines$: Subscription = this.cuisineService
       .fetchFisrtsThreeMostPopulated()
-      .subscribe((response: ICuisine[]) => {
-        const data = response;
+      .subscribe((data: ICuisine[]) => this.mostPopulatedCuisines = data,
+        (errorResponse: HttpErrorResponse) => this.notificationService.showError(errorResponse.error.message));
 
-        // @ts-ignore: Object is possibly 'null'.
-        data.push(
-          {
-            id: '',
-            name: 'Explorer more',
-            imageThumbnailUrl: 'https://iamafoodblog.b-cdn.net/wp-content/uploads/2020/05/homemade-birria-tacos-recipe-3273w.jpg'
-          }
-        );
-
-        this.mostPopulatedCuisines = data;
-      }, (responseError: HttpErrorResponse) => {
-        console.log(responseError.error.message);
-      });
     this.subscriptions.push(cuisines$);
   }
 
   private userSubscriber(): void {
     const chefs$: Subscription = this.userService
       .fetchBestThreeChefs()
-      .subscribe((data: any) => {
-        console.log("user data: ", data)
-        this.bestChefs = data;
-      });
+      .subscribe((data: IUserCard[]) => this.bestChefs = data,
+        (errorResponse: HttpErrorResponse) => this.notificationService.showError(errorResponse.error.message));
 
     this.subscriptions.push(chefs$);
   }

@@ -18,4 +18,5 @@ public class ErrorMessages {
     public static final String USER_CANNOT_BE_DEMOTED = "Regular users cannot be demoted!";
     public static final String ROLE_NOT_EXISTS = "Role %s does not exists!";
     public static final String IMAGE_NOT_UPLOADED = "Image was not uploaded successfully! Please try again.";
+    public static final String CUISINE_NOT_FOUND = "Cuisine was not found!";
 }

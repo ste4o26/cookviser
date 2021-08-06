@@ -135,18 +135,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserServiceModel update(UserServiceModel userServiceModel, Principal principal) throws UserNotAuthenticatedException {
+    public UserServiceModel update(UserServiceModel userServiceModel) {
         if (userServiceModel == null) {
             throw new IllegalArgumentException(ErrorMessages.REQUIRED_ARGUMENTS_NOT_PROVIDED);
-        }
-
-        String username = principal.getName();
-        if (username == null || username.trim().isEmpty()) {
-            throw new UserNotAuthenticatedException(FORBIDDEN_MESSAGE);
-        }
-
-        if (!username.equals(userServiceModel.getUsername())) {
-            throw new AccessDeniedException(ACCESS_DENIED_MESSAGE);
         }
 
         UserEntity userEntity = this.modelMapper.map(userServiceModel, UserEntity.class);
@@ -221,7 +212,8 @@ public class UserServiceImpl implements UserService {
         }
 
         return allUsers.stream()
-                .sorted((first, second) -> (int) (second.getOverallRating() - first.getOverallRating()))
+                .sorted((first, second) -> (int) Math.round(second.getOverallRating() - first.getOverallRating()))
+                .limit(3)
                 .collect(Collectors.toList());
     }
 }

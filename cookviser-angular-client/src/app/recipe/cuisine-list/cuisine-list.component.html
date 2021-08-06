@@ -1,3 +1,12 @@
-<div>
-    <app-cousinue-card *ngFor="let cuisine of cuisines" [cuisine]="cuisine"></app-cousinue-card>
-</div>
+<main class="all-cuisines-main">
+    <header class="main-header">
+        <h2>Explorer all of our cuisines</h2>
+    </header>
+
+    <!-- <div class="search-results" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" (scrolled)="onScroll()"> -->
+        <article class="main-content">
+            <app-cousinue-card *ngFor="let cuisine of cuisines" [cuisine]="cuisine" class="cuisine-card">
+            </app-cousinue-card>
+        </article>
+    <!-- </div> -->
+</main>

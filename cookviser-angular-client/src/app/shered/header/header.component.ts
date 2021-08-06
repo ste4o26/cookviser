@@ -1,4 +1,4 @@
-import { Component, DoCheck, OnChanges, OnInit } from '@angular/core';
+import { Component, DoCheck, OnChanges } from '@angular/core';
 import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
@@ -7,15 +7,10 @@ import { AuthService } from 'src/app/auth/auth.service';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements DoCheck {
-  private authService: AuthService;
-  public username: string | null;
-  public isLogedIn: boolean;
+  public username: string = '';
+  public isLogedIn: boolean = false;
 
-  public constructor(authService: AuthService) {
-    this.authService = authService
-    this.isLogedIn = false;
-    this.username = null;
-  }
+  public constructor(private authService: AuthService) { }
 
   public ngDoCheck(): void {
     this.isLogedIn = this.authService.isLoggedIn();

@@ -21,4 +21,10 @@
 
         <button [ngClass]="{'invalid': loginForm.invalid === true}" [disabled]="loginForm.invalid" class="login-button">Login</button>
     </form>
+
+    <footer class="navigation-footer">
+        <h3>Don't Have an account?</h3>
+        <a routerLink="/auth/register">Join Us</a>
+    </footer>
 </main>
+

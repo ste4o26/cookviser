@@ -1,0 +1,147 @@
+.user-profile-main {
+    width: 95%;
+    margin: 2em auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.main-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    min-height: 25em;
+    text-align: center;
+}
+
+.image-container {
+    width: 15em;
+    height: 15em;
+    border-radius: 0.3em;
+    border: 2px solid #F6987A;
+}
+
+.image-container img {
+    width: inherit;
+    height: inherit;
+    border-radius: inherit;
+}
+
+.edit-icon-label {
+    position: relative;
+    left: 6.5em;
+    bottom: 1.5em;
+}
+
+.edit-image-icon {
+    width: inherit;
+    height: inherit;
+    color: lawngreen;
+}
+
+.main-content .form-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content:  flex-start;
+    align-items: center;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 42%;
+    margin: 2em;
+}
+
+.input-container .control-name {
+    margin: 0;
+}
+
+.input-container .form-control {
+    width: 100%;
+    padding: 1em;
+    border: none;
+    border-radius: 0.3em;
+    border-bottom: 2px solid lawngreen;
+}
+
+.control-label {
+    position: relative;
+    left: 11.9em;
+    top: 2.3em;
+    height: inherit;
+    height: 2em;
+}
+
+.control-label .edit-icon {
+    position: relative;
+    top: 0.4em;
+}
+
+.input-container.description-container {
+    width: 90.6%;
+}
+
+.input-container.description-container .control-label {
+    width: 2em;
+    height: 3.8em;
+    left: 25.8em;
+    top: 4em;
+}
+
+.input-container.description-container .control-label .edit-icon {
+    position: relative;
+    top: 1em;
+}
+
+.update-button {
+    border: none;
+    border-radius: 0.2em;
+    margin: 2em auto 0.5em auto;
+    padding: 1em 2em;
+    cursor: pointer;
+    background: linear-gradient(40deg, #FFCB9C, #f59477);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+}
+
+.user-recipes {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 5em;
+}
+
+.recipes-container {
+    margin-top: 2em;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.card-wrapper {
+    margin: 1.5em 1.2em;
+}
+
+.form-control:focus {
+    outline-width: 0;
+}
+
+.form-control.ng-touched.ng-invalid {
+    border-bottom: 2px solid lightcoral;
+}
+
+.update-button.invalid {
+    cursor: not-allowed;
+}
+
+textarea {
+    resize: none;
+    height: 3em;
+}

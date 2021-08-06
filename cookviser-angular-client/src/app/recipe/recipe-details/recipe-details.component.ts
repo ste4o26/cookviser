@@ -1,11 +1,12 @@
-import { HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 
 import { Observable, Subscription } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/auth.service';
 import { IUser } from 'src/app/auth/interface/user.interface';
+import { NotificationService } from 'src/app/shered/notification.service';
 import { UserService } from 'src/app/user/user.service';
 import { IRate } from '../interface/rate.interface';
 
@@ -25,8 +26,23 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
 
   public constructor(private recipeService: RecipeService,
     private activatedRoute: ActivatedRoute,
-    private userService: UserService, 
-    private authService: AuthService) {
+    private userService: UserService,
+    private authService: AuthService,
+    private notificationService: NotificationService,
+    private router: Router) {
+  }
+
+  private loadRecipe(): void {
+    let recipeId: string = '';
+    const route$: Subscription = this.activatedRoute.params
+      .subscribe(params => recipeId = params.id);
+
+    const recipeDetails$: Subscription = this.recipeService
+      .fetchById(recipeId)
+      .subscribe(data => this.recipe = data);
+
+    this.subscriptions.push(recipeDetails$)
+    this.subscriptions.push(route$)
   }
 
   public toggleIsCookingHandler() {
@@ -35,12 +51,13 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
 
   public onRateHandler(event: any) {
     if (this.recipe == null || this.recipe.publisherUsername === undefined) {
-      console.log("log some error to the user")
+      this.notificationService.showError("Something went wrong! Please try again.")
       return
     }
     const username = this.authService.getLoggedInUsername();
-    if(username === null) {
-      console.log('Access Denied');
+    if (username === null) {
+      this.notificationService.showError('Access Denied! Please login to continue!');
+      this.router.navigateByUrl('/auth/login');
       return;
     }
 
@@ -48,7 +65,7 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
       .fetchByUsername(username)
       .subscribe((response: HttpResponse<IUser>) => {
         if (!response.ok || response.body == null) {
-          console.log("log some error to the user")
+          this.notificationService.showError("Something went wrong! Please try again.")
           return;
         }
 
@@ -60,23 +77,14 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
 
         this.recipeService
           .rate(rating)
-          .subscribe(data => this.recipe = data.recipe);
-      });
-
-
+          .subscribe(data => this.recipe = data.recipe,
+            (errorResponse: HttpErrorResponse) => this.notificationService.showError(errorResponse.error.message));
+      },
+        (errorResponse: HttpErrorResponse) => this.notificationService.showError(errorResponse.error.message));
   }
 
   public ngOnInit(): void {
-    let recipeId: string = '';
-    const route$: Subscription = this.activatedRoute.params
-      .subscribe(params => recipeId = params.id);
-
-    const recipeDetails$: Subscription = this.recipeService
-      .fetchById(recipeId)
-      .subscribe(data => this.recipe = data);
-
-    this.subscriptions.push()
-    this.subscriptions.push(route$);
+    this.loadRecipe();
   }
 
   public ngOnDestroy(): void {

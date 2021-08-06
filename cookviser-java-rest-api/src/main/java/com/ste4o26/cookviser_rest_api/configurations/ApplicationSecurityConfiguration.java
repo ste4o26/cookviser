@@ -25,10 +25,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapter {
-    private static final String[] PUBLIC_URLS = {"/auth/login", "/auth/register",
-            "/recipe/todayBestThree", "/recipe/all", "/recipe/search", "/recipe/create, /upload-recipe-image",
-            "/cuisine/firstThreeMostPopulated", "/cuisine/all",
-            "/user/bestThree"};
+    private static final String[] PUBLIC_URLS = {"/auth/login", "/auth/register"};
+//    "/recipe/todayBestThree", "/recipe/all", "/recipe/search", "/recipe/create, /upload-recipe-image",
+//            "/cuisine/firstThreeMostPopulated", "/cuisine/all",
+//            "/user/bestThree"
 
     private final UserDetailsServiceImpl userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;

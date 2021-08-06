@@ -1,5 +1,5 @@
 .login-main {
-    height: 45em;
+    height: 50em;
     background-image: url("https://res.cloudinary.com/ste4o26/image/upload/v1627154815/cookviser/loginBackground-removebg-preview_jzlf6n.png");
     background-repeat: no-repeat;
     background-size: 80% 100%;
@@ -59,11 +59,28 @@
     border-radius: 0.2em;
     padding: 1em 2em;
     cursor: pointer;
-    background-color: #e3c8aa;
+    background: linear-gradient(40deg, #FFCB9C, #f59477);
     text-transform: uppercase;
     letter-spacing: 2px;
+    box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
 }
 
 .login-button.invalid {
     cursor: not-allowed;
+}
+
+.navigation-footer {
+    position: absolute;
+    top: 47em;
+    left: 26em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.navigation-footer a {
+    font-size: 1.5em;
+    font-weight: bolder;
+    text-decoration: none;
+    color: #f59477;
 }

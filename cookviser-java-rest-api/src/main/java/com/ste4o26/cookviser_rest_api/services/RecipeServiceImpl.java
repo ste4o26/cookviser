@@ -1,7 +1,9 @@
 package com.ste4o26.cookviser_rest_api.services;
 
+import com.ste4o26.cookviser_rest_api.domain.entities.CuisineEntity;
 import com.ste4o26.cookviser_rest_api.domain.entities.RecipeEntity;
 import com.ste4o26.cookviser_rest_api.domain.entities.enums.CategoryName;
+import com.ste4o26.cookviser_rest_api.domain.service_models.CuisineServiceModel;
 import com.ste4o26.cookviser_rest_api.domain.service_models.RecipeServiceModel;
 import com.ste4o26.cookviser_rest_api.domain.service_models.StepServiceModel;
 import com.ste4o26.cookviser_rest_api.domain.service_models.UserServiceModel;
@@ -12,6 +14,8 @@ import com.ste4o26.cookviser_rest_api.repositories.RecipeRepository;
 import com.ste4o26.cookviser_rest_api.services.interfaces.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -93,7 +97,7 @@ public class RecipeServiceImpl implements RecipeService {
         RecipeServiceModel recipeServiceModel = this.fetchById(recipeId);
 
         userServiceModel.getMyCookedRecipes().add(recipeServiceModel);
-        this.userService.update(userServiceModel, principal);
+        this.userService.update(userServiceModel);
 
         return recipeServiceModel;
     }
@@ -134,6 +138,7 @@ public class RecipeServiceImpl implements RecipeService {
 
         return allRecipes.stream()
                 .sorted((first, second) -> (int) (second.getOverallRating() - first.getOverallRating()))
+                .limit(4)
                 .collect(Collectors.toList());
     }
 
@@ -150,6 +155,20 @@ public class RecipeServiceImpl implements RecipeService {
         List<RecipeEntity> allRecipes = this.recipeRepository.findAll();
 
         return RecipeServiceModel.mapFrom(allRecipes, this.modelMapper);
+    }
+
+    @Override
+    public List<RecipeServiceModel> fetchNextByCuisine(CuisineServiceModel cuisineServiceModel, Integer recipesCount) {
+        CuisineEntity cuisineEntity = this.modelMapper.map(cuisineServiceModel, CuisineEntity.class);
+        List<RecipeEntity> allByCuisine = this.recipeRepository.findAllByCuisine(cuisineEntity, PageRequest.of(0, recipesCount));
+
+        return RecipeServiceModel.mapFrom(allByCuisine, this.modelMapper);
+    }
+
+    @Override
+    public List<RecipeServiceModel> fetchNextRecipes(Integer recipesCount) {
+        List<RecipeEntity> nextPage = this.recipeRepository.findAll(PageRequest.of(0, recipesCount)).toList();
+        return RecipeServiceModel.mapFrom(nextPage, this.modelMapper);
     }
 
 

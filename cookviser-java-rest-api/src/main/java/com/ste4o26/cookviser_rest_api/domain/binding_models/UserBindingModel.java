@@ -15,6 +15,7 @@ public class UserBindingModel {
     private String id;
     private String username;
     private String  email;
+    private String description;
     private String profileImageUrl;
     private UserRoleServiceModel role;
     private Set<UserAuthorityServiceModel> authorities;

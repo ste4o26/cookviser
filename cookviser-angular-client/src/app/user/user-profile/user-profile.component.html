@@ -1,1 +1,61 @@
-<p>user-profile works!</p>
+<!-- {{user | json}} -->
+<main class="user-profile-main" *ngIf="user!=null">
+    <header class="main-header">
+        <form #profileImageUpdate="ngForm" (ngSubmit)="submitImageHandler();" enctype="multipart/form-data"
+            class="form-group">
+            <div class="image-container">
+                <img src="{{user.profileImageUrl}}" alt="Profile image">
+                <label for="profileImage" class="edit-icon-label"><i
+                        class="fas fa-user-edit fa-lg edit-image-icon"></i></label>
+                <input ngModel #profileImageInput="ngModel" (change)="changeProfileImageHandler($event)" type="file" name="profileImage" id="profileImage"
+                    required hidden>
+            </div>
+
+            <button [ngClass]="{'invalid': profileImageUpdate.invalid === true}" [disabled]="profileImageUpdate.invalid"
+                class="update-button">Edit Profile Image</button>
+
+            <h2>My Profile</h2>
+        </form>
+    </header>
+
+    <article class="main-content">
+        <form #profileDataUpdate="ngForm" (ngSubmit)="submitDataHandler(profileDataUpdate.value)" class="form-group">
+            <div class="input-container">
+                <p class="control-name">Username</p>
+                <label for="username" class="control-label"><i class="fas fa-user-edit fa-lg edit-icon"></i></label>
+                <input [ngModel]="user.username" #usernameInput="ngModel" type="text" name="username"
+                    class="form-control" id="username" required minlength="5" readonly>
+            </div>
+
+            <div class="input-container">
+                <p class="control-name">Email</p>
+                <label for="email" class="control-label"><i class="fas fa-user-edit fa-lg edit-icon"></i></label>
+                <input [ngModel]="user.email" #emailInput="ngModel" type="text" name="email" class="form-control"
+                    id="email" required  pattern="[a-zA-Z0-9._-]{3,}@[a-zA-Z0-9.-]{3,}\.[a-zA-Z]{2,4}" autofocus="false">
+            </div>
+
+            <div class="input-container description-container">
+                <p class="control-name">Description</p>
+                <label for="description" class="control-label"><i class="fas fa-user-edit fa-lg edit-icon"></i></label>
+                <textarea [ngModel]="user.description" #descriptionInput="ngModel" type="text" name="description"
+                    class="form-control" id="description" required minlength="10">
+                </textarea>
+            </div>
+
+            <button [ngClass]="{'invalid': profileDataUpdate.invalid === true}" [disabled]="profileDataUpdate.invalid"
+                class="update-button">Edit Profile</button>
+        </form>
+    </article>
+
+    <section class="user-recipes">
+        <header class="recipes-header">
+            <h2>My Recipes</h2>
+        </header>
+
+        <div class="recipes-container">
+            <div class="card-wrapper" *ngFor="let recipe of user.myRecipes">
+                <app-recipe-card [recipe]="recipe"></app-recipe-card>
+            </div>
+        </div>
+    </section>
+</main>

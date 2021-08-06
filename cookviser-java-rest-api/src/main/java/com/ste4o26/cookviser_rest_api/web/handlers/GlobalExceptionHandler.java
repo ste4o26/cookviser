@@ -9,6 +9,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.io.IOException;
+
 import static com.ste4o26.cookviser_rest_api.init.ErrorMessages.*;
 import static org.springframework.http.HttpStatus.*;
 
@@ -78,4 +80,15 @@ public class GlobalExceptionHandler {
     public ResponseEntity<HttpResponseModel> demotionDeniedExceptionHandler(DemotionDeniedException e){
         return this.createHttpResponse(BAD_REQUEST, e.getMessage());
     }
+
+    @ExceptionHandler(CuisineDontExistsException.class)
+    public ResponseEntity<HttpResponseModel> cuisineDontExistsExceptionHandler(CuisineDontExistsException e){
+        return this.createHttpResponse(BAD_REQUEST, e.getMessage());
+    }
+
+    @ExceptionHandler(IOException.class)
+    public ResponseEntity<HttpResponseModel> imageNotUploadedExceptionHandler(ImageNotUploadedException e){
+        return this.createHttpResponse(BAD_REQUEST, e.getMessage());
+    }
+//    TODO make an exception handler for TokenExpiredException!!!
 }

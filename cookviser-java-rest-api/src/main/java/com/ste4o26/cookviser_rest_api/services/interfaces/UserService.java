@@ -16,7 +16,7 @@ public interface UserService {
     UserServiceModel register(UserServiceModel userServiceModel)
             throws RoleNotFoundException, EmailAlreadyExistsException, UsernameAlreadyExistsException;
 
-    UserServiceModel update(UserServiceModel userServiceModel, Principal principal) throws UserNotAuthenticatedException;
+    UserServiceModel update(UserServiceModel userServiceModel);
 
     UserServiceModel promote(UserServiceModel userServiceModel) throws RoleNotFoundException, PromotionDeniedException;
 

@@ -44,15 +44,21 @@ public class RateServiceImpl implements RateService {
 
     @Override
     public double calculateUserOverallRate(UserServiceModel user) {
-        double overallRate = 0.0;
         int totalRateSum = 0;
+        int totalRateCount = 0;
         for (RecipeServiceModel recipe : user.getMyRecipes()) {
+            boolean hasRateBiggerThanZero = false;
             for (RateServiceModel rate : recipe.getRates()) {
                 totalRateSum += rate.getRateValue();
+                hasRateBiggerThanZero = rate.getRateValue() != 0;
             }
-            overallRate = (double) totalRateSum / recipe.getRates().size();
+            if (hasRateBiggerThanZero) {
+                totalRateCount += recipe.getRates().size();
+            }
         }
+        double overallRate = (double) totalRateSum / totalRateCount;
 
+        if (Double.isNaN(overallRate)) return 0;
         return overallRate;
     }
 

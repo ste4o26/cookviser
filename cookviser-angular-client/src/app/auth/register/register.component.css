@@ -1,5 +1,5 @@
 .register-main {
-    height: 45em;
+    height: 50em;
     background-image: url("https://res.cloudinary.com/ste4o26/image/upload/v1627162332/cookviser/register-removebg-preview_qocnzi.png");
     background-repeat: no-repeat;
     background-size: 60% 90%;
@@ -63,10 +63,27 @@
     background: linear-gradient(40deg, #FFCB9C, #f59477);
     text-transform: uppercase;
     letter-spacing: 2px;
+    box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
 }
 
 .register-button.invalid {
     cursor: not-allowed;
+}
+
+.navigation-footer {
+    position: absolute;
+    top: 45em;
+    left: 19em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.navigation-footer a {
+    font-size: 1.5em;
+    font-weight: bolder;
+    text-decoration: none;
+    color: #f59477;
 }
 
 textarea {

@@ -69,7 +69,6 @@
 
 .steps-container {
     width: 100%;
-    /* background-color:#9e0b1a; */
     display: flex;
     justify-content: space-between;
 }

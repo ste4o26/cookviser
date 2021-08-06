@@ -1,5 +1,7 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { NotificationService } from 'src/app/shered/notification.service';
 import { ICuisine } from '../interface/cuisine.interface';
 import { CuisineService } from '../service/cuisine.service';
 
@@ -12,12 +14,13 @@ export class CuisineListComponent implements OnInit, OnDestroy {
   public cuisines: ICuisine[] = [];
   public subscriptions: Subscription[] = [];
 
-  public constructor(private cuisineService: CuisineService) { }
+  public constructor(private cuisineService: CuisineService, private notificationService: NotificationService) { }
 
   public ngOnInit(): void {
     const cuisines$ = this.cuisineService
       .fetchAll()
-      .subscribe(data => this.cuisines = data);
+      .subscribe(data => this.cuisines = data,
+        (errorResponse: HttpErrorResponse) => this.notificationService.showError(errorResponse.error.message));
 
     this.subscriptions.push(cuisines$);
   }

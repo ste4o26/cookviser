@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpEvent, HttpParams, HttpRequest, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { IRecipeCard } from '../interface/recipe-card.interface'
 import { Observable } from 'rxjs';
-import { of as observableOf } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { IRecipe } from '../interface/recipe.interface';
 import { IRate } from '../interface/rate.interface';
@@ -46,5 +45,15 @@ export class RecipeService {
   public fetchById(recipeId: string): Observable<IRecipe> {
     const params = new HttpParams().set('recipeId', recipeId);
     return this.http.get<IRecipe>(`${this.host}/details`, { params })
+  }
+
+  public fetchNextByCuisine(cuisineName: string, recipesCount: number): Observable<IRecipeCard[]> {
+    const params = new HttpParams().set('cuisineName', cuisineName).set('recipesCount', recipesCount);
+    return this.http.get<IRecipeCard[]>(`${this.host}/next-by-cuisine`, { params });
+  }
+
+  public fetchNextRecipes(recipesCount: number): Observable<IRecipeCard[]> {
+    const params = new HttpParams().set('recipesCount', recipesCount);
+    return this.http.get<IRecipeCard[]>(`${this.host}/next-recipes`, { params });
   }
 }

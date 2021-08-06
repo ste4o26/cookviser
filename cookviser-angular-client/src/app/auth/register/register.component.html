@@ -1,5 +1,5 @@
 <main class="register-main">
-    <form #loginForm="ngForm" (ngSubmit)="submitHandler(loginForm.value)" class="form-group">
+    <form #registerForm="ngForm" (ngSubmit)="submitHandler(registerForm.value)" class="form-group">
         <h2>Register</h2>
 
         <div class="input-container">
@@ -14,8 +14,8 @@
             <span class="icon-wrapper">
                 <i class="fas fa-envelope"></i>
             </span>
-            <input ngModel #emailInput="ngModel" required pattern="[a-zA-Z0-9._-]{3,}@[a-zA-Z0-9.-]{3,}\.[a-zA-Z]{2,4}" name="email" class="form-control" type="email"
-                placeholder="Email" autocomplete="off">
+            <input ngModel #emailInput="ngModel" required pattern="[a-zA-Z0-9._-]{3,}@[a-zA-Z0-9.-]{3,}\.[a-zA-Z]{2,4}"
+                name="email" class="form-control" type="email" placeholder="Email" autocomplete="off">
         </div>
 
         <div class="input-container">
@@ -23,7 +23,7 @@
                 <i class="fas fa-address-card"></i>
             </span>
             <textarea ngModel #descriptionInput="ngModel" required minlength="10" name="description"
-                class="form-control" placeholder="Description" autocomplete="off" ></textarea>
+                class="form-control" placeholder="Description" autocomplete="off"></textarea>
         </div>
 
         <div class="input-container">
@@ -42,7 +42,12 @@
                 class="form-control" type="password" placeholder="Confirm Password" autocomplete="off">
         </div>
 
-        <button [ngClass]="{'invalid': loginForm.invalid === true}" [disabled]="loginForm.invalid"
+        <button [ngClass]="{'invalid': registerForm.invalid === true}" [disabled]="registerForm.invalid"
             class="register-button">Register</button>
     </form>
+
+    <footer class="navigation-footer">
+        <h3>Already have an account?</h3>
+        <a routerLink="/auth/login">Go To Login</a>
+    </footer>
 </main>

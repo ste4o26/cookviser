@@ -5,17 +5,11 @@ import com.ste4o26.cookviser_rest_api.domain.binding_models.RecipeBindingModel;
 import com.ste4o26.cookviser_rest_api.domain.entities.enums.CategoryName;
 import com.ste4o26.cookviser_rest_api.domain.response_models.RateResponseModel;
 import com.ste4o26.cookviser_rest_api.domain.response_models.RecipeResponseModel;
+import com.ste4o26.cookviser_rest_api.domain.service_models.CuisineServiceModel;
 import com.ste4o26.cookviser_rest_api.domain.service_models.RateServiceModel;
 import com.ste4o26.cookviser_rest_api.domain.service_models.RecipeServiceModel;
-import com.ste4o26.cookviser_rest_api.exceptions.ImageNotPresentException;
-import com.ste4o26.cookviser_rest_api.exceptions.RecipeNotExistsException;
-import com.ste4o26.cookviser_rest_api.exceptions.SearchValueNotProvidedException;
-import com.ste4o26.cookviser_rest_api.exceptions.UserNotAuthenticatedException;
-import com.ste4o26.cookviser_rest_api.init.ErrorMessages;
-import com.ste4o26.cookviser_rest_api.services.interfaces.CloudService;
-import com.ste4o26.cookviser_rest_api.services.interfaces.RateService;
-import com.ste4o26.cookviser_rest_api.services.interfaces.RecipeService;
-import com.ste4o26.cookviser_rest_api.services.interfaces.UserService;
+import com.ste4o26.cookviser_rest_api.exceptions.*;
+import com.ste4o26.cookviser_rest_api.services.interfaces.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,13 +34,40 @@ public class RecipeController {
     private final UserService userService;
     private final CloudService cloudService;
     private final RateService rateService;
+    private final CuisineService cuisineService;
 
-    public RecipeController(RecipeService recipeService, ModelMapper modelMapper, UserService userService, CloudService cloudService, RateService rateService) {
+    public RecipeController(RecipeService recipeService, ModelMapper modelMapper, UserService userService, CloudService cloudService, RateService rateService, CuisineService cuisineService) {
         this.recipeService = recipeService;
         this.modelMapper = modelMapper;
         this.userService = userService;
         this.cloudService = cloudService;
         this.rateService = rateService;
+        this.cuisineService = cuisineService;
+    }
+
+    @GetMapping("/next-recipes")
+    public ResponseEntity<List<RecipeResponseModel>> getNextRecipes(@RequestParam("recipesCount") Integer recipesCount) {
+        List<RecipeServiceModel> nextPageRecipes = this.recipeService.fetchNextRecipes(recipesCount);
+
+        List<RecipeResponseModel> collect = nextPageRecipes.stream()
+                .map(recipeServiceModel -> this.modelMapper.map(recipeServiceModel, RecipeResponseModel.class))
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(collect, OK);
+    }
+
+    @GetMapping("/next-by-cuisine")
+    public ResponseEntity<List<RecipeResponseModel>> getAllByCuisine(@RequestParam("cuisineName") String cuisineName,
+                                                                     @RequestParam("recipesCount") Integer recipesCount) throws CuisineDontExistsException {
+        CuisineServiceModel cuisineServiceModel = this.cuisineService.fetchByName(cuisineName);
+
+        List<RecipeServiceModel> recipesByCuisine = this.recipeService.fetchNextByCuisine(cuisineServiceModel, recipesCount);
+
+        List<RecipeResponseModel> collect = recipesByCuisine.stream()
+                .map(recipeServiceModel -> this.modelMapper.map(recipeServiceModel, RecipeResponseModel.class))
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(collect, OK);
     }
 
     @GetMapping("/details")
@@ -65,7 +86,7 @@ public class RecipeController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<RecipeResponseModel>> getSearch(@RequestParam(required = false) String searchValue)
+    public ResponseEntity<List<RecipeResponseModel>> getSearch(@RequestParam("searchValue") String searchValue)
             throws SearchValueNotProvidedException {
         List<RecipeServiceModel> recipeServiceModels = this.recipeService.fetchAllContains(searchValue);
 

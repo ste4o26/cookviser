@@ -18,17 +18,24 @@ export class UserService {
   }
 
   public fetchAll(): Observable<IUser[]> {
-    // return observableOf(this.users);
     return this.http.get<IUser[]>(`${this.host}/all`);
   }
 
   public fetchBestThreeChefs(): Observable<IUserCard[]> {
-    // return observableOf(this.users.slice(0, 3));
     return this.http.get<IUserCard[]>(`${this.host}/best-three`);
   }
 
   public fetchByUsername(username: string): Observable<HttpResponse<IUser>> {
     let params: HttpParams = new HttpParams().set('username', username);
-    return this.http.get<IUser>(`${this.host}/by-username`, { params, observe: 'response'});
+    return this.http.get<IUser>(`${this.host}/by-username`, { params, observe: 'response' });
+  }
+
+  public updateProfileImage(formData: FormData): Observable<HttpResponse<IUser>> {
+    return this.http.post<IUser>(`${this.host}/update-profile-image`, formData, { observe: 'response' });
+  }
+
+  public updateProfile(user: IUser): Observable<HttpResponse<IUser>> {
+    return this.http.post<IUser>(`${this.host}/update-profile`, user, { observe: 'response' });
+
   }
 }

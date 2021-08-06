@@ -11,7 +11,8 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { AuthInterceptor } from './interceptor/auth.interceptor';
 import { RatingModule } from 'ng-starrating';
-
+// import { NgxSpinnerModule } from 'ngx-spinner';
+import { LoadInterceptor } from './interceptor/load.interceptor';
 
 @NgModule({
   declarations: [
@@ -25,10 +26,14 @@ import { RatingModule } from 'ng-starrating';
     RecipeModule,
     UserModule,
     AuthModule,
-    RatingModule
+    RatingModule,
+    // NgxSpinnerModule
   ],
-  // TODO check for multi property again!
-  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
+
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: LoadInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

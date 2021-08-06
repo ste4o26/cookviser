@@ -21,6 +21,6 @@ export class CuisineService {
   }
 
   public fetchFisrtsThreeMostPopulated(): Observable<ICuisine[]> {
-    return this.http.get<ICuisine[]>(`${this.host}/first-three-most-populated`);
+    return this.http.get<ICuisine[]>(`${this.host}/first-four-most-populated`);
   }
 }

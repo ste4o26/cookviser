@@ -6,7 +6,7 @@
     <header class="card-header">
         <!-- TOOD add the query params instead of hardcoding it!!! -->
         <a [routerLink]="['/user/profile', user.username]">{{user.username}}</a>
-        <p>Overall Rating: {{user.overallRating}}</p>
+        <p>Overall Rating: {{user.overallRating.toPrecision(2)}}</p>
     </header>
     
     <main #contentElement class="card-content hidden fas">

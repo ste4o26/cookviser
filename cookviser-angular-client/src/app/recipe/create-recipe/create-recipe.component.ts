@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms'
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { IUser } from 'src/app/auth/interface/user.interface';
+import { NotificationService } from 'src/app/shered/notification.service';
 import { UserService } from 'src/app/user/user.service';
 import { ICuisine } from '../interface/cuisine.interface';
 import { IRate } from '../interface/rate.interface';
@@ -28,7 +29,8 @@ export class CreateRecipeComponent implements OnInit, OnDestroy {
     private recipeService: RecipeService,
     private cuisineService: CuisineService,
     private authService: AuthService,
-    private userService: UserService) {
+    private userService: UserService,
+    private notificationService: NotificationService) {
 
     this.createRecipeForm = this.formBuilder.group(this.buildFormGroup());
   }
@@ -55,7 +57,7 @@ export class CreateRecipeComponent implements OnInit, OnDestroy {
     const categories$: Subscription = this.recipeService
       .fetchAllCategories()
       .subscribe((data: string[]) => { this.categories = data.map(category => category.toLowerCase()); },
-        (errorResponse: HttpErrorResponse) => { console.log(errorResponse.error.message); });
+        (errorResponse: HttpErrorResponse) => this.notificationService.showError(errorResponse.error.message));
 
     this.subscriptions.push(categories$);
   }
@@ -64,14 +66,14 @@ export class CreateRecipeComponent implements OnInit, OnDestroy {
     const cuisines$: Subscription = this.cuisineService
       .fetchAll()
       .subscribe((data: ICuisine[]) => { this.cuisines = data; },
-        (errorResponse: HttpErrorResponse) => { console.log(errorResponse.error.message); });
+        (errorResponse: HttpErrorResponse) => this.notificationService.showError(errorResponse.error.message));
 
     this.subscriptions.push(cuisines$);
   }
 
   private uploadRecipeImage(id: string): void {
     if (this.file === null) {
-      console.log('Recipe image is reuired!');
+      this.notificationService.showError('Recipe image is reuired!');
       return;
     }
 
@@ -80,8 +82,14 @@ export class CreateRecipeComponent implements OnInit, OnDestroy {
     formData.append('recipeId', id);
 
     this.recipeService.uploadRecipeImage(formData)
-      .subscribe((response: HttpResponse<IRecipe>) => { if (response.ok && response.body !== null) { this.rateRecipe(response.body); }
-      }, (errorResponse: HttpErrorResponse) => { console.log(errorResponse); });
+      .subscribe((response: HttpResponse<IRecipe>) => {
+        if (!response.ok || response.body === null) {
+          this.notificationService.showError('Something went wrong! Please try again.');
+          return;
+        }
+
+        this.rateRecipe(response.body);
+      }, (errorResponse: HttpErrorResponse) => { this.notificationService.showError(errorResponse.error.message) });
   }
 
   private rateRecipe(recipe: IRecipe) {
@@ -96,11 +104,13 @@ export class CreateRecipeComponent implements OnInit, OnDestroy {
           }
 
           const rate$: Subscription = this.recipeService.rate(rating)
-            .subscribe(data => console.log(data));
+            .subscribe(data => {
+              if (data === null) this.notificationService.showError('Something went wrong! Please try again.');
+            }, (errorResponse: HttpErrorResponse) => this.notificationService.showError(errorResponse.error.message));
 
           this.subscriptions.push(rate$);
         }
-      });
+      }, (errorResponse: HttpErrorResponse) => this.notificationService.showError(errorResponse.error.message));
 
     this.subscriptions.push(user$);
   }
@@ -124,17 +134,17 @@ export class CreateRecipeComponent implements OnInit, OnDestroy {
     // @ts-ignore: Object is possibly 'null'.
     recipe.publisher = this.authService.getLoggedInUsername();
     recipe.ingredients = recipe.ingredients.toString().split(', ');
-    // recipe.category = recipe.category.toUpperCase();
 
     const createRecipe$ = this.recipeService.create(recipe)
       .subscribe((response: HttpResponse<IRecipe>) => {
-        if (response.status === 200) {
-          // @ts-ignore: Object is possibly 'null'.
-          this.uploadRecipeImage(response.body?.id);
-        } else {
-          console.log('Your recipe has NOT been posted successfully!')
+        if (response === null || response.status !== 200 || response.body == null) {
+          this.notificationService.showError('Your recipe has NOT been posted successfully!');
+          return;
         }
-      }, (errorResponse: HttpErrorResponse) => { console.log(errorResponse) });
+
+        this.uploadRecipeImage(response.body?.id);
+        this.notificationService.showSucces('Your recipe has been posted successfully!');
+      }, (errorResponse: HttpErrorResponse) => this.notificationService.showError(errorResponse.error.message));
 
     this.subscriptions.push(createRecipe$);
   }

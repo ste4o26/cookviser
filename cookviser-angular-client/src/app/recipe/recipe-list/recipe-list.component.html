@@ -1,1 +1,13 @@
-<p>recipe-list works!</p>
+<main class="all-recipes-main">
+    <header class="main-header">
+        <h2>{{currentHeading}} Recipes</h2>
+    </header>
+    <!-- type="ball-spin-clockwise" -->
+    <div class="search-results" infiniteScroll [infiniteScrollDistance]="0" [infiniteScrollThrottle]="50"
+        (scrolled)="onScroll()">
+        <article class="main-content">
+            <app-recipe-card *ngFor="let recipe of recipes" [recipe]="recipe" class="recipe-card"></app-recipe-card>
+        </article>
+    </div>
+    <h4 *ngIf="!hasNextPage">No more recipes :(</h4>
+</main>

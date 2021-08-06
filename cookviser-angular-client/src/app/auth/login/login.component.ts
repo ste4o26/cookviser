@@ -3,6 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { pipe, Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
+import { NotificationService } from 'src/app/shered/notification.service';
 import { AuthService } from '../auth.service';
 import { IUserLogin } from '../interface/user-login.interface';
 import { IUser } from '../interface/user.interface';
@@ -13,14 +14,36 @@ import { IUser } from '../interface/user.interface';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  private authService: AuthService;
-  private router: Router;
-  private subscirptions: Subscription[];
+  private subscirptions: Subscription[] = [];
 
-  public constructor(authService: AuthService, router: Router) {
-    this.authService = authService;
-    this.router = router;
-    this.subscirptions = [];
+  public constructor(private authService: AuthService,
+    private router: Router,
+    private notificationService: NotificationService) { }
+
+  public submitHandler(user: IUserLogin) {
+    const login$: Subscription = this.authService
+      .login(user)
+      .subscribe(
+        (response: HttpResponse<IUser>) => {
+          if (response.body === null) {
+            this.notificationService.showError('Something went wrong! Please try again.');
+            return;
+          }
+          
+          const token = response.headers.get('jwtToken');
+          if(token === null){
+            this.notificationService.showError('Something went wrong! Please try again.');
+            return
+          }
+
+          this.authService.setUserToken(token);
+          this.authService.setLoggedInUsername(response.body?.username);
+
+          this.notificationService.showSucces('You have logged in.')
+          this.router.navigateByUrl('/home');
+        }, (errorResponse: HttpErrorResponse) => this.notificationService.showError(errorResponse.error.message));
+
+    this.subscirptions.push(login$);
   }
 
   public ngOnInit(): void {
@@ -32,29 +55,4 @@ export class LoginComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.subscirptions.forEach(subscription => subscription.unsubscribe());
   }
-
-  public submitHandler(user: IUserLogin) {
-    const login$: Subscription = this.authService
-      .login(user)
-      .subscribe(
-        (response: HttpResponse<IUser>) => {
-          // @ts-ignore: Object is possibly 'null'.
-          const token: string = response.headers.get('jwtToken');
-          this.authService.setUserToken(token);
-
-          // @ts-ignore: Object is possibly 'null'.
-          const username: string = response.body.username;
-          this.authService.setLoggedInUsername(username);
-
-          this.router.navigateByUrl('/home');
-        },
-        (errorResponse: HttpErrorResponse) => {
-          // TODO handle the errors properly with eror component and/or notifications!
-          console.log(errorResponse.error.message)
-        }
-      );
-
-    this.subscirptions.push(login$);
-  }
-
 }

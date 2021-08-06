@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,11 +40,11 @@ public class CuisineController {
         return new ResponseEntity<>(collect, OK);
     }
 
-    @GetMapping("/first-three-most-populated")
-    public ResponseEntity<List<CuisineResponseModel>> getFirstThreeMostPopulated() {
-        List<CuisineServiceModel> firstThreeMostPopulated = this.cuisineService.fetchFirstThreeMostPopulated();
+    @GetMapping("/first-four-most-populated")
+    public ResponseEntity<List<CuisineResponseModel>> getFirstFourMostPopulated() {
+        List<CuisineServiceModel> firstFourMostPopulated = this.cuisineService.fetchFirstFourMostPopulated();
 
-        List<CuisineResponseModel> collect = firstThreeMostPopulated.stream()
+        List<CuisineResponseModel> collect = firstFourMostPopulated.stream()
                 .map(cuisineServiceModel -> this.modelMapper.map(cuisineServiceModel, CuisineResponseModel.class))
                 .collect(Collectors.toList());
 

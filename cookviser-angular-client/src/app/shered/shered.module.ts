@@ -2,7 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
-import { AppRoutingModule } from '../app-routing.module'
+import { AppRoutingModule } from '../app-routing.module';
+import { SimpleNotificationsComponent, SimpleNotificationsModule } from 'angular2-notifications';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 
 @NgModule({
   declarations: [
@@ -11,11 +13,14 @@ import { AppRoutingModule } from '../app-routing.module'
   ],
   imports: [
     CommonModule,
-    AppRoutingModule
+    AppRoutingModule,
+    SimpleNotificationsModule.forRoot(),
+    BrowserAnimationsModule
   ],
   exports: [
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    SimpleNotificationsComponent
   ]
 })
 export class SheredModule { }
