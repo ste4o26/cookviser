@@ -1,18 +1,14 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
+import { NotificationService } from '../shered/notification.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
-  private authService: AuthService;
-  private router: Router;
 
-  public constructor(authService: AuthService, router: Router) {
-    this.authService = authService;
-    this.router = router;
-  }
+  public constructor(private authService: AuthService, private router: Router, private notficationService: NotificationService) {}
 
   private isLoggedInUser(): boolean {
     if (this.authService.isLoggedIn()) {
@@ -20,6 +16,7 @@ export class AuthGuard implements CanActivate {
     }
 
     this.router.navigate(['/auth/login']);
+    this.notficationService.showError('Access Denied! Please Log In to continue.');
     return false;
   }
 

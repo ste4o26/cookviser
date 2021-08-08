@@ -4,8 +4,8 @@
     </div>
 
     <header class="card-header">
-        <!-- TOOD add the query params instead of hardcoding it!!! -->
-        <a [routerLink]="['/user/profile', user.username]">{{user.username}}</a>
+        <!-- <a [routerLink]="['/user/profile', user.username]">{{user.username}}</a> -->
+        <p id="username">{{user.username}}</p>
         <p>Overall Rating: {{user.overallRating.toPrecision(2)}}</p>
     </header>
     

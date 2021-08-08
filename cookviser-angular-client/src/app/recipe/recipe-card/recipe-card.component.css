@@ -33,7 +33,8 @@
     padding: 0.5em;
     text-decoration: none;
     color: #000000;
-    background-color: #f5a682;
+    background: linear-gradient(40deg, #FFCB9C, #f59477);
     border-radius: 0.2em;
+    box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
 }
 

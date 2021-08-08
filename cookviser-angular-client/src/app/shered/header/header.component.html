@@ -10,7 +10,10 @@
                 <a routerLink="/cuisine/all">All Cuisines</a>
             </li>
             <li class="list-item">
-                <a routerLink="/recipe/all">All Recipe</a>
+                <a routerLink="/recipe/all">All Recipes</a>
+            </li>
+            <li *ngIf="isLogedIn && !isBasicUser" class="list-item">
+                <a routerLink="/user/all">All Users</a>
             </li>
             <li *ngIf="isLogedIn" class="list-item">
                 <a routerLink="/recipe/add">Add Recipe</a>

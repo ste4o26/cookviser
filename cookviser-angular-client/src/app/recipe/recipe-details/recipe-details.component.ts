@@ -77,8 +77,10 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
 
         this.recipeService
           .rate(rating)
-          .subscribe(data => this.recipe = data.recipe,
-            (errorResponse: HttpErrorResponse) => this.notificationService.showError(errorResponse.error.message));
+          .subscribe(data => {
+            this.recipe = data.recipe
+            this.notificationService.showSucces(`You have rated ${this.recipe?.name} with ${rating.rateValue} stars successfully.`);
+          }, (errorResponse: HttpErrorResponse) => this.notificationService.showError(errorResponse.error.message));
       },
         (errorResponse: HttpErrorResponse) => this.notificationService.showError(errorResponse.error.message));
   }

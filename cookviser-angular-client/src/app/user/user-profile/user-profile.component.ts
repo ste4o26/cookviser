@@ -1,6 +1,6 @@
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, DoCheck, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { IUser } from 'src/app/auth/interface/user.interface';
@@ -15,18 +15,29 @@ import { UserService } from '../user.service';
 export class UserProfileComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   private profileImage: File | null = null;
+  private username: string = '';
+
   public user: IUser | null = null;
 
   public constructor(private userService: UserService,
     private authService: AuthService,
     private router: Router,
-    private notificationSercice: NotificationService) { }
+    private notificationSercice: NotificationService,
+    private activatedRoute: ActivatedRoute) { }
 
+
+  private getUsernameFromParams(): void {
+    const params$ = this.activatedRoute.params
+      .subscribe(params => this.username = params.username);
+
+    this.subscriptions.push(params$);
+  }
 
   private loadUser(): void {
-    const username: string = this.authService.getLoggedInUsername();
+    this.getUsernameFromParams();
+    // const username: string = this.authService.getLoggedInUsername();
     const user$ = this.userService
-      .fetchByUsername(username)
+      .fetchByUsername(this.username)
       .subscribe((response: HttpResponse<IUser>) => this.user = response.body,
         (errorResponse: HttpErrorResponse) => this.notificationSercice.showError(errorResponse.error.message));
 
@@ -59,8 +70,10 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
     this.userService
       .updateProfileImage(formData)
-      .subscribe((response: HttpResponse<IUser>) => this.user = response.body,
-        (errorResponse: HttpErrorResponse) => this.notificationSercice.showError(errorResponse.error.message));
+      .subscribe((response: HttpResponse<IUser>) => {
+        this.user = response.body;
+        this.notificationSercice.showSucces('Profile image updated.');
+      }, (errorResponse: HttpErrorResponse) => this.notificationSercice.showError(errorResponse.error.message));
   }
 
   public submitDataHandler(user: IUser): void {
@@ -69,20 +82,39 @@ export class UserProfileComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.userService.updateProfile(user)
+    this.userService.updateProfile(user, this.username)
       .subscribe((response: HttpResponse<IUser>) => {
         if (response.body === null) {
           this.notificationSercice.showError('Something went wrong please Re Log In!');
           return;
         }
         this.user = response.body;
-        this.router.navigateByUrl(`/user/profile/${this.authService.getLoggedInUsername()}`)
-      }, (errorResponse: HttpErrorResponse) => this.notificationSercice.showError(errorResponse.error.message));
+        this.router.navigateByUrl(`/user/profile/${this.username}`);
+        this.notificationSercice.showSucces('Profile updated.');
+      }, (errorResponse: HttpErrorResponse) => {
+        if (errorResponse.status >= 500) {
+          // TODO make an error page for all responses with >= 500 status!!!!
+          this.notificationSercice.showError('Sorry the problem is on our side. We are working on it. Please try again later.');
+        }
+
+        this.notificationSercice.showError(errorResponse.error.message);
+      });
   }
 
   public ngOnInit(): void {
     this.loadUser();
   }
+
+  // ngDoCheck(): void {
+  //   // this.loadUser();
+  //   const olderUsername = this.username;
+  //   console.log(olderUsername)
+  //   this.getUsernameFromParams();
+  //   if (olderUsername !== this.username) {
+  //     this.loadUser();
+  //     this.router.navigateByUrl(`/user/profile/${this.username}`);
+  //   }
+  // }
 
   public ngOnDestroy(): void {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());

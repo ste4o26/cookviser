@@ -5,11 +5,13 @@ import { AppRoutingModule } from '../app-routing.module';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { FormsModule } from '@angular/forms';
 import { RecipeModule } from '../recipe/recipe.module';
+import { UsersListComponent } from './users-list/users-list.component';
 
 @NgModule({
   declarations: [
     UserCardComponent,
-    UserProfileComponent
+    UserProfileComponent,
+    UsersListComponent
   ],
   imports: [
     CommonModule,

@@ -24,6 +24,7 @@
     background: linear-gradient(40deg, #FFCB9C, #f59477);
     text-transform: uppercase;
     letter-spacing: 2px;
+    box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
 }
 
 .add-step-button {

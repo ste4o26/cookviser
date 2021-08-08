@@ -30,7 +30,18 @@
     margin: 0;
 }
 
-.card-header a {
+/* .card-header a {
+    margin: 0.1em;
+    text-decoration: none;
+    padding: 0.5em;
+    color: #000000;
+    text-transform: capitalize;
+    font-weight: bolder;
+    font-size: 1.5em;
+    border-radius: 0.2em;
+} */
+
+.card-header #username {
     margin: 0.1em;
     text-decoration: none;
     padding: 0.5em;
@@ -40,6 +51,7 @@
     font-size: 1.5em;
     border-radius: 0.2em;
 }
+
 
 .card-header a:hover{
     background-color: #ba727c;

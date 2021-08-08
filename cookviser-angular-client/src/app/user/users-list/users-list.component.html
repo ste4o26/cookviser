@@ -1,0 +1,12 @@
+<main class="all-users-main">
+    <article class="all-users-wrapper">
+        <ul class="users-list">
+            <li *ngFor="let user of users" class="list-item">
+                <h3>{{user.username}}</h3>
+                <a [routerLink]="['/user/profile', user.username]" class="item-button">View Profile</a>
+                <button (click)="promoteUser(user.username)" class="item-button">Promote</button>
+                <button (click)="demoteUser(user.username)" class="item-button">Demote</button>
+            </li>
+        </ul>
+    </article>
+</main>

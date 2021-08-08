@@ -38,6 +38,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
           this.authService.setUserToken(token);
           this.authService.setLoggedInUsername(response.body?.username);
+          this.authService.setLoggedInUser(response.body);
 
           this.notificationService.showSucces('You have logged in.')
           this.router.navigateByUrl('/home');

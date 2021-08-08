@@ -34,8 +34,16 @@ export class UserService {
     return this.http.post<IUser>(`${this.host}/update-profile-image`, formData, { observe: 'response' });
   }
 
-  public updateProfile(user: IUser): Observable<HttpResponse<IUser>> {
-    return this.http.post<IUser>(`${this.host}/update-profile`, user, { observe: 'response' });
+  public updateProfile(user: IUser, editorUsername: string): Observable<HttpResponse<IUser>> {
+    const params: HttpParams = new HttpParams().set('editorUsername', editorUsername);
+    return this.http.post<IUser>(`${this.host}/update-profile`, user, { params, observe: 'response' });
+  }
 
+  public promote(username: string): Observable<HttpResponse<IUser>> {
+    return this.http.put<IUser>(`${this.host}/promote`, username, { observe: 'response' });
+  }
+
+  public demote(username: string): Observable<HttpResponse<IUser>> {
+    return this.http.put<IUser>(`${this.host}/demote`, username, { observe: 'response' });
   }
 }

@@ -16,6 +16,7 @@ import { NotificationService } from '../shered/notification.service';
 export class AuthService {
   private token: string = '';
   private loggedInUsername: string = '';
+  private loggedInUser: IUser | null = null;
   private jwtHelperService: JwtHelperService;
 
   public host: string = environment.domain.concat('/auth');
@@ -29,14 +30,19 @@ export class AuthService {
     localStorage.setItem('jwtToken', this.token)
   }
 
-  public setLoggedInUsername(loggedInUsername: string) {
+  public setLoggedInUsername(loggedInUsername: string): void {
     this.loggedInUsername = loggedInUsername;
     localStorage.setItem('loggedInUsername', this.loggedInUsername);
   }
 
+  public setLoggedInUser(loggedInUser: IUser): void {
+    this.loggedInUser = loggedInUser;
+    localStorage.setItem('loggedInUser', JSON.stringify(this.loggedInUser));
+  }
+
   public loadToken(): void {
     const tempToken = localStorage.getItem('jwtToken');
-    if(tempToken === null) {
+    if (tempToken === null) {
       this.token = '';
       return;
     }
@@ -50,6 +56,13 @@ export class AuthService {
 
   public getLoggedInUsername(): string {
     return this.loggedInUsername;
+  }
+
+  public getLoggedInUser(): IUser {
+    // @ts-ignore: Object is possibly 'null'.
+    this.loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+    // @ts-ignore: Object is possibly 'null'.
+    return this.loggedInUser;
   }
 
   public isLoggedIn(): boolean {
@@ -82,5 +95,8 @@ export class AuthService {
 
     this.loggedInUsername = '';
     localStorage.removeItem('loggedInUsername');
+
+    this.loggedInUser = null;
+    localStorage.removeItem('loggedInUser');
   }
 }
