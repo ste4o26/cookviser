@@ -9,6 +9,7 @@ import com.ste4o26.cookviser_rest_api.domain.service_models.CuisineServiceModel;
 import com.ste4o26.cookviser_rest_api.domain.service_models.RateServiceModel;
 import com.ste4o26.cookviser_rest_api.domain.service_models.RecipeServiceModel;
 import com.ste4o26.cookviser_rest_api.exceptions.*;
+import com.ste4o26.cookviser_rest_api.init.ErrorMessages;
 import com.ste4o26.cookviser_rest_api.services.interfaces.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.ste4o26.cookviser_rest_api.init.ErrorMessages.IMAGE_NOT_UPLOADED;
-import static com.ste4o26.cookviser_rest_api.init.ErrorMessages.RECIPE_NOT_EXISTS;
+import static com.ste4o26.cookviser_rest_api.init.ErrorMessages.*;
 import static org.springframework.http.HttpStatus.*;
 
 @CrossOrigin(origins = "http://localhost:4200", exposedHeaders = {"jwtToken"})
@@ -145,17 +145,12 @@ public class RecipeController {
     @PostMapping("/upload-recipe-image")
     public ResponseEntity<RecipeResponseModel> postUploadRecipeImage(
             @RequestPart("image") MultipartFile multipartFile,
-            @RequestParam("recipeId") String recipeId) throws ImageNotPresentException, RecipeNotExistsException {
+            @RequestParam("recipeId") String recipeId) throws RecipeNotExistsException, ImageNotUploadedException, ImageNotPresentException {
         if (multipartFile == null || multipartFile.isEmpty()) {
-            throw new ImageNotPresentException("Image is required!");
+            throw new ImageNotPresentException(IMAGE_NOT_PRESENT);
         }
 
-        String imageThumbnailUrl;
-        try {
-            imageThumbnailUrl = this.cloudService.uploadImage(multipartFile);
-        } catch (IOException ioe) {
-            throw new ImageNotPresentException(IMAGE_NOT_UPLOADED);
-        }
+        String imageThumbnailUrl = this.cloudService.uploadImage(multipartFile);
 
         RecipeServiceModel recipeServiceModel = this.recipeService.fetchById(recipeId);
         recipeServiceModel.setRecipeThumbnail(imageThumbnailUrl);
