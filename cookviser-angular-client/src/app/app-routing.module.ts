@@ -6,6 +6,7 @@ import { AdminGuard } from './guard/admin.guard';
 import { AuthGuard } from './guard/auth.guard';
 import { UserProfileGuard } from './guard/user-profile.guard';
 import { HomeComponent } from './home/home.component';
+import { CreateCuisineComponent } from './recipe/create-cuisine/create-cuisine.component';
 import { CreateRecipeComponent } from './recipe/create-recipe/create-recipe.component';
 import { CuisineListComponent } from './recipe/cuisine-list/cuisine-list.component';
 import { RecipeDetailsComponent } from './recipe/recipe-details/recipe-details.component';
@@ -24,6 +25,7 @@ const routes: Routes = [
   { path: 'recipe/all', component: RecipeListComponent },
   { path: 'recipe/all/:cuisine', component: RecipeListComponent },
   { path: 'cuisine/all', component: CuisineListComponent },
+  { path: 'cuisine/add', component: CreateCuisineComponent, canActivate: [AuthGuard, AdminGuard]},
   { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];
 

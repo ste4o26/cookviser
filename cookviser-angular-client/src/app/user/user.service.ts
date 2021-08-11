@@ -31,12 +31,12 @@ export class UserService {
   }
 
   public updateProfileImage(formData: FormData): Observable<HttpResponse<IUser>> {
-    return this.http.post<IUser>(`${this.host}/update-profile-image`, formData, { observe: 'response' });
+    return this.http.put<IUser>(`${this.host}/update-profile-image`, formData, { observe: 'response' });
   }
 
   public updateProfile(user: IUser, editorUsername: string): Observable<HttpResponse<IUser>> {
     const params: HttpParams = new HttpParams().set('editorUsername', editorUsername);
-    return this.http.post<IUser>(`${this.host}/update-profile`, user, { params, observe: 'response' });
+    return this.http.put<IUser>(`${this.host}/update-profile`, user, { params, observe: 'response' });
   }
 
   public promote(username: string): Observable<HttpResponse<IUser>> {

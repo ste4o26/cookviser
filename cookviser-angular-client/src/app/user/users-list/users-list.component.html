@@ -1,11 +1,20 @@
-<main class="all-users-main">
+<main class="admin-pannel-main">
+    <header class="main-header">
+        <h2>Admin Pannel</h2>
+    </header>
     <article class="all-users-wrapper">
         <ul class="users-list">
             <li *ngFor="let user of users" class="list-item">
-                <h3>{{user.username}}</h3>
-                <a [routerLink]="['/user/profile', user.username]" class="item-button">View Profile</a>
-                <button (click)="promoteUser(user.username)" class="item-button">Promote</button>
-                <button (click)="demoteUser(user.username)" class="item-button">Demote</button>
+                <div class="user-details">
+                    <h3>{{user.username}}</h3>
+                    <p>{{user.email}}</p>
+                    <p>{{user.role.roleName}}</p>
+                </div>
+                <div class="options">
+                    <button [routerLink]="['/user/profile', user.username]" class="item-button">Profile</button>
+                    <button (click)="promoteUser(user.username)" class="item-button">Promote</button>
+                    <button (click)="demoteUser(user.username)" class="item-button">Demote</button>
+                </div>
             </li>
         </ul>
     </article>

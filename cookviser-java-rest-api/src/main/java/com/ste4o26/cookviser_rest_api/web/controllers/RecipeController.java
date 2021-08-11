@@ -171,5 +171,11 @@ public class RecipeController {
         return new ResponseEntity<>(rateResponseModel, OK);
     }
 
+    @DeleteMapping("/delete")
+    public ResponseEntity<RecipeResponseModel> delete(@RequestParam("recipeId") String recipeId) throws RecipeNotExistsException {
+        RecipeServiceModel recipeServiceModel = this.recipeService.deleteById(recipeId);
+        RecipeResponseModel recipeResponseModel = this.modelMapper.map(recipeServiceModel, RecipeResponseModel.class);
+        return new ResponseEntity<>(recipeResponseModel, OK);
+    }
 }
 

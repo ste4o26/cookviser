@@ -56,4 +56,9 @@ export class RecipeService {
     const params = new HttpParams().set('recipesCount', recipesCount);
     return this.http.get<IRecipeCard[]>(`${this.host}/next-recipes`, { params });
   }
+
+  public deleteById(id: string): Observable<IRecipe> {
+    const params = new HttpParams().set('recipeId', id);
+    return this.http.delete<IRecipe>(`${this.host}/delete`, { params });
+  }
 }

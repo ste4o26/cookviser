@@ -1,0 +1,131 @@
+.form-control.ng-touched.ng-invalid {
+    border: 3px solid #9e0b1a;
+}
+
+.form-control.ng-touched.ng-valid {
+    border: 3px solid #0c7849;
+}
+
+.form-control:focus {
+    outline-width: 0;
+}
+
+.create-recipe-button:disabled {
+    cursor: not-allowed;
+}
+
+.create-recipe-button,
+.add-step-button {
+    margin: 2em auto;
+    border: none;
+    border-radius: 0.2em;
+    padding: 1em 2em;
+    cursor: pointer;
+    background: linear-gradient(40deg, #FFCB9C, #f59477);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+}
+
+.add-step-button {
+    padding: 0.5em 1em;
+    background: #e3c8aa;
+}
+
+.create-recipe-main {
+    width: 90%;
+    height: 100%;
+    margin: auto;
+}
+
+.form-group {
+    border-radius: 0.2em;
+    background-color: #dbad79;
+    margin: 3em auto;
+    width: 50%;
+    min-height: 35em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+}
+
+.form-control {
+    box-sizing: border-box;
+    width: 90%;
+    margin-bottom: 1em;
+    margin-top: 1em;
+    border: none;
+    border-radius: 0.2em;
+    height: 2em;
+    padding: 0.5em;
+}
+
+.input-container {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    align-items: center;
+}
+
+.steps-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.steps-wrapper .steps-container input {
+    width: 97%;
+}
+
+.select-menus-container {
+    width: 80%;
+    display: flex;
+}
+
+.input-container input,
+.steps-wrapper,
+.input-container textarea {
+    width: 100%;
+}
+
+textarea {
+    height: 5em;
+}
+
+h2 {
+    padding: 0.2em 0.5em;
+    border-bottom: 2px solid #c26b51;
+}
+
+#file-input {
+    opacity: 0;
+}
+
+#file-label {
+    position: relative;
+    left: 180px;
+    width: 20em;
+    height: 50px;
+    border-radius: 0.5em;
+    background: linear-gradient(40deg, #FFCB9C, #f59477);
+    box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000000;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+select {
+    padding: 0 !important;
+    width: 50%;
+    margin: auto;
+    background: linear-gradient(40deg, #FFCB9C, #f59477);
+    color: #000000;
+    border: none;
+    font-size: 1.3em;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+    text-transform: capitalize;
+}

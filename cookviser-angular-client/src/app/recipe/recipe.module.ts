@@ -1,7 +1,7 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from '../app-routing.module';
 import { RatingModule } from 'ng-starrating';
@@ -14,6 +14,7 @@ import { CuisineListComponent } from './cuisine-list/cuisine-list.component';
 import { RecipeListComponent } from './recipe-list/recipe-list.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { CreateCuisineComponent } from './create-cuisine/create-cuisine.component';
 
 @NgModule({
   declarations: [
@@ -22,12 +23,14 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     RecipeDetailsComponent,
     CreateRecipeComponent,
     CuisineListComponent,
-    RecipeListComponent
+    RecipeListComponent,
+    CreateCuisineComponent
   ],
   imports: [
     CommonModule,
     AppRoutingModule,
     HttpClientModule,
+    FormsModule,
     ReactiveFormsModule,
     RatingModule,
     InfiniteScrollModule,

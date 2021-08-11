@@ -29,7 +29,6 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
         this.jwtUtil = jwtUtil;
     }
 
-    //TODO razgledai go pak i go razberi po dobre !!!!!
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest,
                                     HttpServletResponse httpServletResponse,

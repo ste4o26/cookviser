@@ -18,6 +18,9 @@
             <li *ngIf="isLogedIn" class="list-item">
                 <a routerLink="/recipe/add">Add Recipe</a>
             </li>
+            <li *ngIf="isLogedIn && !isBasicUser" class="list-item">
+                <a routerLink="/cuisine/add">Add Cuisine</a>
+            </li>
         </ul>
 
         <ul class="nav-list auth">

@@ -69,6 +69,7 @@ public class UserController {
         return new ResponseEntity<>(userResponseModel, OK);
     }
 
+    @PreAuthorize("hasAuthority('UPDATE')")
     @GetMapping("all")
     public ResponseEntity<List<UserResponseModel>> getAll() {
         List<UserServiceModel> allUsers = this.userService.fetchAll();
@@ -80,8 +81,7 @@ public class UserController {
         return new ResponseEntity<>(collect, OK);
     }
 
-
-    @PostMapping("/update-profile-image")
+    @PutMapping("/update-profile-image")
     public ResponseEntity<UserResponseModel> postUpdateUserProfileImage(
             @RequestPart("profileImage") MultipartFile profileImage,
             @RequestParam("username") String username) throws ImageNotUploadedException, ImageNotPresentException {
@@ -100,7 +100,7 @@ public class UserController {
         return new ResponseEntity<>(responseModel, OK);
     }
 
-    @PostMapping("/update-profile")
+    @PutMapping("/update-profile")
     public ResponseEntity<UserResponseModel> postUpdateUserProfile(
             @RequestBody UserBindingModel userBindingModel,
             @RequestParam("editorUsername") String editorUsername) throws UserNotAuthorizedException {

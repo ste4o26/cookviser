@@ -1,0 +1,59 @@
+.admin-pannel-main {
+    width: 100%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.main-header {
+    margin: 2em auto;
+}
+
+.all-users-wrapper {
+  width: 90%
+}
+
+.users-list {
+    padding: 2em 0;
+    border-radius: 0.3em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    background-color: #ffdebf;
+}
+
+.list-item {
+    width: 100%;
+    margin: 2em auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.user-details {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.options {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.item-button {
+    border: none;
+    border-radius: 0.2em;
+    padding: 1em 2em;
+    cursor: pointer;
+    background: linear-gradient(40deg, #FFCB9C, #f59477);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+}

@@ -23,4 +23,8 @@ export class CuisineService {
   public fetchFisrtsThreeMostPopulated(): Observable<ICuisine[]> {
     return this.http.get<ICuisine[]>(`${this.host}/first-four-most-populated`);
   }
+
+  public create(formData: FormData): Observable<ICuisine> {
+    return this.http.post<ICuisine>(`${this.host}/create`, formData);
+  }
 }

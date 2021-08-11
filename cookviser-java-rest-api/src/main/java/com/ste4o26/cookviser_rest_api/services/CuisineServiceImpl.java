@@ -1,5 +1,6 @@
 package com.ste4o26.cookviser_rest_api.services;
 
+import com.ste4o26.cookviser_rest_api.domain.binding_models.CuisineBindingModel;
 import com.ste4o26.cookviser_rest_api.domain.entities.CuisineEntity;
 import com.ste4o26.cookviser_rest_api.domain.service_models.CuisineServiceModel;
 import com.ste4o26.cookviser_rest_api.exceptions.CuisineDontExistsException;
@@ -60,5 +61,12 @@ public class CuisineServiceImpl implements CuisineService {
                 .orElseThrow(() -> new CuisineDontExistsException(CUISINE_NOT_FOUND));
 
         return this.modelMapper.map(cuisineEntity, CuisineServiceModel.class);
+    }
+
+    @Override
+    public CuisineServiceModel persist(CuisineServiceModel cuisineServiceModel) {
+        CuisineEntity cuisineEntity = this.modelMapper.map(cuisineServiceModel, CuisineEntity.class);
+        CuisineEntity created = this.cuisineRepository.saveAndFlush(cuisineEntity);
+        return this.modelMapper.map(created, CuisineServiceModel.class);
     }
 }

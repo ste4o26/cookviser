@@ -85,6 +85,19 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
         (errorResponse: HttpErrorResponse) => this.notificationService.showError(errorResponse.error.message));
   }
 
+  deleteRecipeHandler() {
+    console.log(this.recipe);
+    if (this.recipe == null) {
+      this.notificationService.showError('Something went wrong on our side! Please try again later.');
+      return;
+    }
+    this.recipeService.deleteById(this.recipe?.id)
+      .subscribe((data: IRecipe) => {
+        this.notificationService.showSucces(`Recipe ${data.name} was deleted.`);
+        this.router.navigateByUrl('/recipe/all');
+      }, (errorResponse: HttpErrorResponse) => this.notificationService.showError(errorResponse.error.massage));
+  }
+
   public ngOnInit(): void {
     this.loadRecipe();
   }
