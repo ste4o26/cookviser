@@ -10,13 +10,12 @@
     outline-width: 0;
 }
 
-.create-recipe-button:disabled {
+.create-cuisine-button:disabled {
     cursor: not-allowed;
 }
 
-.create-recipe-button,
-.add-step-button {
-    margin: 2em auto;
+.create-cuisine-button {
+    margin-top: 4em;
     border: none;
     border-radius: 0.2em;
     padding: 1em 2em;
@@ -27,15 +26,11 @@
     box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
 }
 
-.add-step-button {
-    padding: 0.5em 1em;
-    background: #e3c8aa;
-}
-
-.create-recipe-main {
+.create-cuisine-main {
     width: 90%;
     height: 100%;
     margin: auto;
+    margin-top: 8em;
 }
 
 .form-group {
@@ -43,7 +38,7 @@
     background-color: #dbad79;
     margin: 3em auto;
     width: 50%;
-    min-height: 35em;
+    min-height: 25em;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -63,30 +58,15 @@
 
 .input-container {
     display: flex;
-    justify-content: space-between;
-    width: 80%;
     align-items: center;
-}
-
-.steps-container {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-}
-
-.steps-wrapper .steps-container input {
-    width: 97%;
-}
-
-.select-menus-container {
+    justify-content: space-around;
     width: 80%;
-    display: flex;
+    margin: 1em auto;
 }
 
-.input-container input,
-.steps-wrapper,
-.input-container textarea {
+input {
     width: 100%;
+    margin: auto;   
 }
 
 textarea {
@@ -104,7 +84,7 @@ h2 {
 
 #file-label {
     position: relative;
-    left: 180px;
+    left: 165px;
     width: 20em;
     height: 50px;
     border-radius: 0.5em;

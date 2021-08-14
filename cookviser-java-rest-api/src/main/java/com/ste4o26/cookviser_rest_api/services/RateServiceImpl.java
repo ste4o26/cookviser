@@ -44,19 +44,35 @@ public class RateServiceImpl implements RateService {
 
     @Override
     public double calculateUserOverallRate(UserServiceModel user) {
+//        int totalRateSum = 0;
+//        int totalRateCount = 0;
+//        for (RecipeServiceModel recipe : user.getMyRecipes()) {
+//            boolean hasRateBiggerThanZero = false;
+//            for (RateServiceModel rate : recipe.getRates()) {
+//                totalRateSum += rate.getRateValue();
+//                hasRateBiggerThanZero = rate.getRateValue() != 0;
+//            }
+//            if (hasRateBiggerThanZero) {
+//                totalRateCount += recipe.getRates().size();
+//            }
+//        }
+//        double overallRate = (double) totalRateSum / totalRateCount;
+
         int totalRateSum = 0;
+        int totalZeroRatesCount = 0;
         int totalRateCount = 0;
         for (RecipeServiceModel recipe : user.getMyRecipes()) {
-            boolean hasRateBiggerThanZero = false;
             for (RateServiceModel rate : recipe.getRates()) {
+                if (rate.getRateValue() == 0) {
+//                    totalZeroRatesCount++;
+                    continue;
+                }
+                totalRateCount++;
                 totalRateSum += rate.getRateValue();
-                hasRateBiggerThanZero = rate.getRateValue() != 0;
-            }
-            if (hasRateBiggerThanZero) {
-                totalRateCount += recipe.getRates().size();
             }
         }
-        double overallRate = (double) totalRateSum / totalRateCount;
+
+        double overallRate = (double) totalRateSum / (totalRateCount);
 
         if (Double.isNaN(overallRate)) return 0;
         return overallRate;
@@ -65,10 +81,21 @@ public class RateServiceImpl implements RateService {
     @Override
     public double calculateRecipeOverallRate(RecipeServiceModel recipe) {
         int totalRateSum = 0;
+        int totalZeroRatesCount = 0;
         for (RateServiceModel rate : recipe.getRates()) {
+            if (rate.getRateValue() == 0) {
+                totalZeroRatesCount++;
+                continue;
+            }
+
             totalRateSum += rate.getRateValue();
         }
 
-        return (double) totalRateSum / recipe.getRates().size();
+//        int size = recipe.getRates().size() - 1;
+//        if (size <= 0) size = 1;
+        double result = (double) totalRateSum / (recipe.getRates().size() - totalZeroRatesCount);
+
+        if (Double.isNaN(result)) return 0;
+        return result;
     }
 }

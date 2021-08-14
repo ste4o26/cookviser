@@ -1,4 +1,4 @@
-<main class="create-recipe-main">
+<main class="create-cuisine-main">
     <form #createCuisineForm="ngForm" (ngSubmit)="submitHandler(createCuisineForm.value)" class="form-group"
         enctype="multipart/form-data">
         <h2>Create Cuisine</h2>
@@ -13,6 +13,6 @@
                 (change)="selectFileHandler($event)">
         </div>
 
-        <button [disabled]="createCuisineForm.invalid" class="create-recipe-button">Create Cuisine</button>
+        <button [disabled]="createCuisineForm.invalid" class="create-cuisine-button">Create Cuisine</button>
     </form>
 </main>

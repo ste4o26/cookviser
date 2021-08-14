@@ -5,66 +5,74 @@
                 <img src="{{recipe?.recipeThumbnail}}">
             </div>
             <h2>{{recipe?.name}}</h2>
-
-            <section *ngIf="!isCooking" class="descriptions-section">
-                <div class="description-container">
-                    <p>Publised By</p>
-                    <p>{{recipe?.publisherUsername}}</p>
-                </div>
-
-                <div class="description-container">
-                    <p>Recipe description</p>
-                    <p>{{recipe?.description}}</p>
-                </div>
-
-                <div class="description-container">
-                    <p>Servings</p>
-                    <p>{{recipe?.portions}}</p>
-                </div>
-
-                <div class="description-container">
-                    <p>Cooking Time</p>
-                    <p>{{recipe?.duration}} min</p>
-                </div>
-
-                <button (click)="toggleIsCookingHandler()">Start Cooking</button>
-                <button (click)="deleteRecipeHandler()">Delete</button>
-            </section>
-
-            <section *ngIf="isCooking" class="cooking-section">
-                <div class="description-container">
-                    <p>Category: {{recipe?.category}}</p>
-                </div>
-                <div class="description-container">
-                    <p>Cuisine: {{recipe?.cuisine?.name}}</p>
-                </div>
-                <div class="ingredients-container">
-                    <p>Ingredients</p>
-                    <ul class="ingredients-list">
-                        <li *ngFor="let ingredient of recipe?.ingredients" class="ingredient-item">
-                            {{ingredient}}
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="steps-container">
-                    <p>Preparation Steps</p>
-                    <ul class="steps-list">
-                        <li *ngFor="let step of recipe?.steps" class="ingredient-item">
-                            <span class="step-number">{{step?.number}}</span>
-                            <span class="step-content">{{step?.content}}</span>
-                        </li>
-                    </ul>
-                </div>
-
-                <section class="rating-section">
-                    {{recipe?.overallRating}}
-                    <star-rating value="{{recipe?.overallRating}}" totalstars={{count}} checkedcolor="gold" uncheckedcolor="black"
-                        size="24px" readonly="false" (rate)="onRateHandler($event)"></star-rating>
-                </section>
-
-                <button (click)="toggleIsCookingHandler()">View Description</button>
-            </section>
         </header>
+
+        <section *ngIf="!isCooking" class="descriptions-section">
+            <div class="description-container">
+                <p>Publised By:</p>
+                <p>{{recipe?.publisherUsername}}</p>
+            </div>
+
+            <div class="description-container">
+                <p>Description:</p>
+                <p>{{recipe?.description}}</p>
+            </div>
+
+            <div class="description-container">
+                <p>Servings:</p>
+                <p>{{recipe?.portions}}</p>
+            </div>
+
+            <div class="description-container">
+                <p>Cooking Time:</p>
+                <p>{{recipe?.duration}} min</p>
+            </div>
+
+            <div class="description-container">
+                <button (click)="toggleIsCookingHandler()">Start Cooking</button>
+                <button *ngIf="!isBasicUser" (click)="deleteRecipeHandler()">Delete</button>
+            </div>
+        </section>
     </article>
+
+    <!-- <article class="cooking-details"> -->
+    <section *ngIf="isCooking" class="cooking-section">
+        <div class="cooking-description-container">
+            <p>Category: {{recipe?.category}}</p>
+        </div>
+        <div class="cooking-description-container">
+            <p>Cuisine: {{recipe?.cuisine?.name}}</p>
+        </div>
+
+        <div class="lists-container">
+            <div class="ingredients-container">
+                <strong>Ingredients:</strong>
+                <ul class="ingredients-list">
+                    <li *ngFor="let ingredient of recipe?.ingredients" class="ingredient-item">
+                        {{ingredient}}
+                    </li>
+                </ul>
+            </div>
+
+            <div class="steps-container">
+                <strong>Preparation Steps:</strong>
+                <ul class="steps-list">
+                    <li *ngFor="let step of recipe?.steps; let i = index"  class="step-item">
+                        <span class="step-number">{{step?.number}}</span>
+                        <p *ngIf="recipe?.steps.length > i + 1" class="verticle-line"></p>
+                        <!-- <span class="step-content">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam facilis eligendi dolorem fuga molestiae sed voluptatem, tempore ad maxime officia deleniti natus praesentium dolore labore eos non debitis. Veniam, corporis.</span> -->
+                        <span class="step-content">{{step?.content}}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <section class="rating-section">
+            <strong>Rating: {{recipe?.overallRating}}</strong>
+            <star-rating class="stars" value="{{recipe?.overallRating}}" totalstars={{count}} checkedcolor="#F69679"
+                uncheckedcolor="black" size="36px" readonly="false" (rate)="onRateHandler($event)"></star-rating>
+        </section>
+
+        <button (click)="toggleIsCookingHandler()">View Description</button>
+    </section>
+    <!-- </article> -->
 </main>

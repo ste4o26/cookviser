@@ -23,6 +23,7 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   public recipe: IRecipe | null = null;
   public isCooking: boolean = false;
+  public isBasicUser: boolean = true;
 
   public constructor(private recipeService: RecipeService,
     private activatedRoute: ActivatedRoute,
@@ -78,6 +79,7 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
         this.recipeService
           .rate(rating)
           .subscribe(data => {
+            console.log(data);
             this.recipe = data.recipe
             this.notificationService.showSucces(`You have rated ${this.recipe?.name} with ${rating.rateValue} stars successfully.`);
           }, (errorResponse: HttpErrorResponse) => this.notificationService.showError(errorResponse.error.message));
@@ -86,7 +88,6 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
   }
 
   deleteRecipeHandler() {
-    console.log(this.recipe);
     if (this.recipe == null) {
       this.notificationService.showError('Something went wrong on our side! Please try again later.');
       return;
@@ -99,6 +100,7 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
+    this.isBasicUser = this.authService.getLoggedInUser().role.roleName === 'ROLE_USER';
     this.loadRecipe();
   }
 

@@ -211,9 +211,21 @@ public class UserServiceImpl implements UserService {
             user.setOverallRating(currentUserOverallRating);
         }
 
-        return allUsers.stream()
-                .sorted((first, second) -> (int) Math.round(second.getOverallRating() - first.getOverallRating()))
+        List<UserServiceModel> collect = allUsers.stream()
+                .sorted((first, second) -> {
+                    if (second.getOverallRating() > first.getOverallRating()) {
+                        return 1;
+                    } else if (second.getOverallRating() < first.getOverallRating()) {
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                })
                 .limit(3)
                 .collect(Collectors.toList());
+
+        int b = 5;
+
+        return collect;
     }
 }

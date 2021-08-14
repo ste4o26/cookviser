@@ -137,7 +137,15 @@ public class RecipeServiceImpl implements RecipeService {
         }
 
         return allRecipes.stream()
-                .sorted((first, second) -> (int) (second.getOverallRating() - first.getOverallRating()))
+                .sorted((first, second) -> {
+                    if (second.getOverallRating() > first.getOverallRating()) {
+                        return 1;
+                    } else if (second.getOverallRating() < first.getOverallRating()) {
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                })
                 .limit(4)
                 .collect(Collectors.toList());
     }

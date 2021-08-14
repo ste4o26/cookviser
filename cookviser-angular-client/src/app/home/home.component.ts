@@ -51,7 +51,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   private userSubscriber(): void {
     const chefs$: Subscription = this.userService
       .fetchBestThreeChefs()
-      .subscribe((data: IUserCard[]) => this.bestChefs = data,
+      .subscribe((data: IUserCard[]) => {
+        this.bestChefs = data;
+        console.log(data);
+      },
         (errorResponse: HttpErrorResponse) => this.notificationService.showError(errorResponse.error.message));
 
     this.subscriptions.push(chefs$);
