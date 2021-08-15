@@ -3,14 +3,12 @@ package com.ste4o26.cookviser_rest_api.services;
 import com.ste4o26.cookviser_rest_api.domain.entities.UserAuthorityEntity;
 import com.ste4o26.cookviser_rest_api.domain.entities.enums.AuthorityName;
 import com.ste4o26.cookviser_rest_api.domain.service_models.UserAuthorityServiceModel;
-import com.ste4o26.cookviser_rest_api.init.ErrorMessages;
 import com.ste4o26.cookviser_rest_api.repositories.AuthorityRepository;
 import com.ste4o26.cookviser_rest_api.services.interfaces.AuthorityService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;

@@ -69,7 +69,7 @@ public class AuthController extends GlobalExceptionHandler {
         UserServiceModel registeredUser = this.userService.register(userServiceModel);
 
         UserResponseModel responseBody = this.modelMapper.map(registeredUser, UserResponseModel.class);
-        return new ResponseEntity<UserResponseModel>(responseBody, HttpStatus.CREATED);
+        return new ResponseEntity<>(responseBody, HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
@@ -82,6 +82,6 @@ public class AuthController extends GlobalExceptionHandler {
         HttpHeaders JWTHeader = getJWTHeaders(actualUser);
         UserResponseModel responseBody = this.modelMapper.map(actualUser, UserResponseModel.class);
 
-        return new ResponseEntity<UserResponseModel>(responseBody, JWTHeader, HttpStatus.OK);
+        return new ResponseEntity<>(responseBody, JWTHeader, HttpStatus.OK);
     }
 }

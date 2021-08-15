@@ -8,7 +8,6 @@ import com.ste4o26.cookviser_rest_api.domain.service_models.UserAuthorityService
 import com.ste4o26.cookviser_rest_api.domain.service_models.UserRoleServiceModel;
 import com.ste4o26.cookviser_rest_api.domain.service_models.UserServiceModel;
 import com.ste4o26.cookviser_rest_api.exceptions.*;
-import com.ste4o26.cookviser_rest_api.init.ErrorMessages;
 import com.ste4o26.cookviser_rest_api.repositories.UserRepository;
 import com.ste4o26.cookviser_rest_api.services.interfaces.AuthorityService;
 import com.ste4o26.cookviser_rest_api.services.interfaces.RateService;
@@ -16,20 +15,18 @@ import com.ste4o26.cookviser_rest_api.services.interfaces.RoleService;
 import com.ste4o26.cookviser_rest_api.services.interfaces.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.management.relation.RoleNotFoundException;
-import java.security.Principal;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.ste4o26.cookviser_rest_api.domain.entities.enums.AuthorityName.*;
 import static com.ste4o26.cookviser_rest_api.domain.entities.enums.RoleName.*;
-import static com.ste4o26.cookviser_rest_api.init.DataInit.DEFAULT_PROFILE_IMAGE_URL;
 import static com.ste4o26.cookviser_rest_api.init.ErrorMessages.*;
+import static com.ste4o26.cookviser_rest_api.init.ImagesUrlConstant.DEFAULT_PROFILE_IMAGE_URL;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -127,8 +124,6 @@ public class UserServiceImpl implements UserService {
 
         UserEntity userEntity = this.modelMapper.map(userServiceModel, UserEntity.class);
         userEntity.setPassword(this.bCryptPasswordEncoder.encode(userServiceModel.getPassword()));
-
-
         UserEntity registeredUser = this.userRepository.saveAndFlush(userEntity);
 
         return this.modelMapper.map(registeredUser, UserServiceModel.class);
@@ -137,7 +132,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserServiceModel update(UserServiceModel userServiceModel) {
         if (userServiceModel == null) {
-            throw new IllegalArgumentException(ErrorMessages.REQUIRED_ARGUMENTS_NOT_PROVIDED);
+            throw new IllegalArgumentException(REQUIRED_ARGUMENTS_NOT_PROVIDED);
         }
 
         UserEntity userEntity = this.modelMapper.map(userServiceModel, UserEntity.class);
@@ -187,7 +182,6 @@ public class UserServiceImpl implements UserService {
         publisher.getMyRecipes().add(createdRecipe);
 
         UserEntity userEntity = this.modelMapper.map(publisher, UserEntity.class);
-
         UserEntity updatedUser = this.userRepository.saveAndFlush(userEntity);
 
         return this.modelMapper.map(updatedUser, UserServiceModel.class);
@@ -205,27 +199,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserServiceModel> fetchBestThreeChefs() {
         List<UserServiceModel> allUsers = this.fetchAll();
-
         for (UserServiceModel user : allUsers) {
             double currentUserOverallRating = this.rateService.calculateUserOverallRate(user);
             user.setOverallRating(currentUserOverallRating);
         }
 
-        List<UserServiceModel> collect = allUsers.stream()
-                .sorted((first, second) -> {
-                    if (second.getOverallRating() > first.getOverallRating()) {
-                        return 1;
-                    } else if (second.getOverallRating() < first.getOverallRating()) {
-                        return -1;
-                    } else {
-                        return 0;
-                    }
-                })
+        return allUsers.stream()
+                .sorted((first, second) -> Double.compare(second.getOverallRating(), first.getOverallRating()))
                 .limit(3)
                 .collect(Collectors.toList());
-
-        int b = 5;
-
-        return collect;
     }
 }

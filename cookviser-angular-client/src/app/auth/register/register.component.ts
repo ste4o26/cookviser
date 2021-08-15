@@ -2,6 +2,7 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { ConstantMessages } from 'src/app/shered/constants';
 import { NotificationService } from 'src/app/shered/notification.service';
 import { AuthService } from '../auth.service';
 import { IUserRegister } from '../interface/user-register.interface';
@@ -23,7 +24,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     const register$: Subscription = this.authService
       .register(user)
       .subscribe((response: HttpResponse<IUser>) => {
-        this.notificationService.showSucces('You have register successfully.')
+        this.notificationService.showSucces(ConstantMessages.REGISTER_SUCCES);
         this.router.navigateByUrl('/auth/login');
       }, (errorResponse: HttpErrorResponse) => this.notificationService.showError(errorResponse.error.message));
 

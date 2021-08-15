@@ -1,8 +1,6 @@
 package com.ste4o26.cookviser_rest_api.domain.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-
 import javax.persistence.*;
 
 @Entity(name = "rates")

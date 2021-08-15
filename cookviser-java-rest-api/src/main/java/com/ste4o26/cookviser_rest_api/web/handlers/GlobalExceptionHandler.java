@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
                 httpStatus.getReasonPhrase().toUpperCase(),
                 message);
 
-        return new ResponseEntity<HttpResponseModel>(httpResponseModel, httpStatus);
+        return new ResponseEntity<>(httpResponseModel, httpStatus);
     }
 
     @ExceptionHandler(BadCredentialsException.class)

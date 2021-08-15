@@ -1,15 +1,17 @@
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms'
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { IUser } from 'src/app/auth/interface/user.interface';
+import { ICuisine } from 'src/app/cuisine/interface/cuisine.interface';
+import { CuisineService } from 'src/app/cuisine/service/cuisine.service';
+import { ConstantMessages } from 'src/app/shered/constants';
 import { NotificationService } from 'src/app/shered/notification.service';
 import { UserService } from 'src/app/user/user.service';
-import { ICuisine } from '../interface/cuisine.interface';
 import { IRate } from '../interface/rate.interface';
 import { IRecipe } from '../interface/recipe.interface';
-import { CuisineService } from '../service/cuisine.service';
 import { RecipeService } from '../service/recipe.service';
 
 @Component({
@@ -30,7 +32,8 @@ export class CreateRecipeComponent implements OnInit, OnDestroy {
     private cuisineService: CuisineService,
     private authService: AuthService,
     private userService: UserService,
-    private notificationService: NotificationService) {
+    private notificationService: NotificationService,
+    private router: Router) {
 
     this.createRecipeForm = this.formBuilder.group(this.buildFormGroup());
   }
@@ -38,7 +41,8 @@ export class CreateRecipeComponent implements OnInit, OnDestroy {
   private buildFormGroup(): any {
     return {
       name: [null, [Validators.required, Validators.minLength(5)]],
-      description: [null, [Validators.required, Validators.minLength(10)]],
+      description: [null, [Validators.required, Validators.minLength(10)]],    
+      recipeImage: [null, [Validators.required]],
       portions: [null, [Validators.required, Validators.min(1)]],
       duration: [null, Validators.required],
       category: [null, Validators.required],
@@ -56,7 +60,7 @@ export class CreateRecipeComponent implements OnInit, OnDestroy {
   private categoriesSubscriber(): void {
     const categories$: Subscription = this.recipeService
       .fetchAllCategories()
-      .subscribe((data: string[]) => { this.categories = data.map(category => category.toLowerCase()); },
+      .subscribe((data: string[]) => this.categories = data.map(category => category.toLowerCase()),
         (errorResponse: HttpErrorResponse) => this.notificationService.showError(errorResponse.error.message));
 
     this.subscriptions.push(categories$);
@@ -65,15 +69,16 @@ export class CreateRecipeComponent implements OnInit, OnDestroy {
   private cuisinesSubscriber(): void {
     const cuisines$: Subscription = this.cuisineService
       .fetchAll()
-      .subscribe((data: ICuisine[]) => { this.cuisines = data; },
-        (errorResponse: HttpErrorResponse) => this.notificationService.showError(errorResponse.error.message));
+      .subscribe((data: ICuisine[]) => {
+        this.cuisines = data;
+      }, (errorResponse: HttpErrorResponse) => this.notificationService.showError(errorResponse.error.message));
 
     this.subscriptions.push(cuisines$);
   }
 
   private uploadRecipeImage(id: string): void {
     if (this.file === null) {
-      this.notificationService.showError('Recipe image is reuired!');
+      this.notificationService.showError(ConstantMessages.IMAGE_REQUIRED_ERROR);
       return;
     }
 
@@ -84,7 +89,7 @@ export class CreateRecipeComponent implements OnInit, OnDestroy {
     this.recipeService.uploadRecipeImage(formData)
       .subscribe((response: HttpResponse<IRecipe>) => {
         if (!response.ok || response.body === null) {
-          this.notificationService.showError('Something went wrong! Please try again.');
+          this.notificationService.showError(ConstantMessages.PLEASE_TRY_AGAIN_ERROR);
           return;
         }
 
@@ -105,7 +110,7 @@ export class CreateRecipeComponent implements OnInit, OnDestroy {
 
           const rate$: Subscription = this.recipeService.rate(rating)
             .subscribe(data => {
-              if (data === null) this.notificationService.showError('Something went wrong! Please try again.');
+              if (data === null) this.notificationService.showError(ConstantMessages.PLEASE_TRY_AGAIN_ERROR);
             }, (errorResponse: HttpErrorResponse) => this.notificationService.showError(errorResponse.error.message));
 
           this.subscriptions.push(rate$);
@@ -137,13 +142,15 @@ export class CreateRecipeComponent implements OnInit, OnDestroy {
 
     const createRecipe$ = this.recipeService.create(recipe)
       .subscribe((response: HttpResponse<IRecipe>) => {
-        if (response === null || response.status !== 200 || response.body == null) {
-          this.notificationService.showError('Your recipe has NOT been posted successfully!');
+        console.log(response);
+        if (response === null || response.status !== 201 || response.body == null) {
+          this.notificationService.showError(ConstantMessages.RECIPE_NOT_CREATED_ERROR);
           return;
         }
 
         this.uploadRecipeImage(response.body?.id);
-        this.notificationService.showSucces('Your recipe has been posted successfully!');
+        this.notificationService.showSucces(ConstantMessages.RECIPE_CREATED_SUCCESS);
+        this.router.navigateByUrl(`/recipe/details/${response.body.id}`);
       }, (errorResponse: HttpErrorResponse) => this.notificationService.showError(errorResponse.error.message));
 
     this.subscriptions.push(createRecipe$);

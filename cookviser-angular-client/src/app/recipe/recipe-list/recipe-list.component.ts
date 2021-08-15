@@ -1,7 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { Subscription } from 'rxjs';
 import { NotificationService } from 'src/app/shered/notification.service';
 import { IRecipeCard } from '../interface/recipe-card.interface';
@@ -24,7 +23,8 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   public constructor(private activatedRout: ActivatedRoute,
     private recipeService: RecipeService,
     private notificationService: NotificationService) {
-    this.activatedRout.params.subscribe(params => this.params = params);
+    const params$: Subscription = this.activatedRout.params.subscribe(params => this.params = params);
+    this.subscriptions.push(params$);
   }
 
   private isExistingParamsInRoute(): boolean {
@@ -77,7 +77,6 @@ export class RecipeListComponent implements OnInit, OnDestroy {
       this.loadNextRecipesByCuisine();
     }
   }
-
 
   public ngOnDestroy(): void {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());

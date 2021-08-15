@@ -121,7 +121,7 @@ img {
     position: relative;
     right: 36.5px;
     top: 16px;
-    height: 5em;
+    height: inherit;
 }
 
 .rating-section {

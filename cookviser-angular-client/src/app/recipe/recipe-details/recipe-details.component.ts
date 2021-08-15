@@ -6,13 +6,13 @@ import { Observable, Subscription } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/auth.service';
 import { IUser } from 'src/app/auth/interface/user.interface';
+import { ConstantMessages } from 'src/app/shered/constants';
 import { NotificationService } from 'src/app/shered/notification.service';
 import { UserService } from 'src/app/user/user.service';
 import { IRate } from '../interface/rate.interface';
 
 import { IRecipe } from '../interface/recipe.interface';
 import { RecipeService } from '../service/recipe.service';
-
 
 @Component({
   selector: 'app-recipe-details',
@@ -30,8 +30,7 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private authService: AuthService,
     private notificationService: NotificationService,
-    private router: Router) {
-  }
+    private router: Router) { }
 
   private loadRecipe(): void {
     let recipeId: string = '';
@@ -42,31 +41,29 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
       .fetchById(recipeId)
       .subscribe(data => this.recipe = data);
 
-    this.subscriptions.push(recipeDetails$)
-    this.subscriptions.push(route$)
+    this.subscriptions.push(recipeDetails$);
+    this.subscriptions.push(route$);
   }
 
-  public toggleIsCookingHandler() {
-    this.isCooking = !this.isCooking;
-  }
+  public toggleIsCookingHandler(): void { this.isCooking = !this.isCooking; }
 
-  public onRateHandler(event: any) {
+  public onRateHandler(event: any): void {
     if (this.recipe == null || this.recipe.publisherUsername === undefined) {
-      this.notificationService.showError("Something went wrong! Please try again.")
-      return
+      this.notificationService.showError(ConstantMessages.PLEASE_TRY_AGAIN_ERROR);
+      return;
     }
     const username = this.authService.getLoggedInUsername();
     if (username === null) {
-      this.notificationService.showError('Access Denied! Please login to continue!');
+      this.notificationService.showError(ConstantMessages.ACCESS_DENIED_ERROR);
       this.router.navigateByUrl('/auth/login');
       return;
     }
 
-    this.userService
+    const user$: Subscription = this.userService
       .fetchByUsername(username)
       .subscribe((response: HttpResponse<IUser>) => {
         if (!response.ok || response.body == null) {
-          this.notificationService.showError("Something went wrong! Please try again.")
+          this.notificationService.showError(ConstantMessages.PLEASE_TRY_AGAIN_ERROR);
           return;
         }
 
@@ -76,31 +73,37 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
           recipe: this.recipe
         }
 
-        this.recipeService
+        const rate$: Subscription = this.recipeService
           .rate(rating)
           .subscribe(data => {
-            console.log(data);
             this.recipe = data.recipe
-            this.notificationService.showSucces(`You have rated ${this.recipe?.name} with ${rating.rateValue} stars successfully.`);
+            this.notificationService.showSucces(`You have rated ${this.recipe?.name} with ${rating.rateValue} stars.`);
           }, (errorResponse: HttpErrorResponse) => this.notificationService.showError(errorResponse.error.message));
-      },
-        (errorResponse: HttpErrorResponse) => this.notificationService.showError(errorResponse.error.message));
+
+        this.subscriptions.push(rate$);
+      }, (errorResponse: HttpErrorResponse) => this.notificationService.showError(errorResponse.error.message));
+
+    this.subscriptions.push(user$);
   }
 
-  deleteRecipeHandler() {
+  public deleteRecipeHandler(): void {
     if (this.recipe == null) {
-      this.notificationService.showError('Something went wrong on our side! Please try again later.');
+      this.notificationService.showError(ConstantMessages.PLEASE_TRY_AGAIN_ERROR);
       return;
     }
-    this.recipeService.deleteById(this.recipe?.id)
+
+    const recipe$: Subscription = this.recipeService.deleteById(this.recipe?.id)
       .subscribe((data: IRecipe) => {
-        this.notificationService.showSucces(`Recipe ${data.name} was deleted.`);
+        this.notificationService.showSucces(ConstantMessages.RECIPE_DELETED_SUCCESS);
         this.router.navigateByUrl('/recipe/all');
       }, (errorResponse: HttpErrorResponse) => this.notificationService.showError(errorResponse.error.massage));
+
+    this.subscriptions.push(recipe$);
   }
 
   public ngOnInit(): void {
-    this.isBasicUser = this.authService.getLoggedInUser().role.roleName === 'ROLE_USER';
+    if (!this.authService.isLoggedIn()) { this.isBasicUser = true; }
+    else { this.isBasicUser = this.authService.getLoggedInUser().role.roleName === 'ROLE_USER'; }
     this.loadRecipe();
   }
 

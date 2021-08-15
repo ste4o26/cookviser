@@ -10,8 +10,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class RecipeBindingModel {
-    private String id;
+public class RecipeBindingModel extends BaseBindingModel {
     private String name;
     private String description;
     private int portions;

@@ -1,20 +1,17 @@
 package com.ste4o26.cookviser_rest_api.services;
 
-import com.ste4o26.cookviser_rest_api.domain.binding_models.CuisineBindingModel;
 import com.ste4o26.cookviser_rest_api.domain.entities.CuisineEntity;
 import com.ste4o26.cookviser_rest_api.domain.service_models.CuisineServiceModel;
 import com.ste4o26.cookviser_rest_api.exceptions.CuisineDontExistsException;
-import com.ste4o26.cookviser_rest_api.init.ErrorMessages;
 import com.ste4o26.cookviser_rest_api.repositories.CuisineRepository;
 import com.ste4o26.cookviser_rest_api.services.interfaces.CuisineService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.ste4o26.cookviser_rest_api.init.ErrorMessages.*;
@@ -44,11 +41,9 @@ public class CuisineServiceImpl implements CuisineService {
         List<CuisineEntity> firstFourMostPopulated =
                 this.cuisineRepository.findFirstThreeMostPopulated(PageRequest.of(0, 4));
 
-        List<CuisineServiceModel> collect = firstFourMostPopulated.stream()
+        return firstFourMostPopulated.stream()
                 .map(cuisineEntity -> this.modelMapper.map(cuisineEntity, CuisineServiceModel.class))
                 .collect(Collectors.toList());
-
-        return collect;
     }
 
     @Override
@@ -66,6 +61,7 @@ public class CuisineServiceImpl implements CuisineService {
     @Override
     public CuisineServiceModel persist(CuisineServiceModel cuisineServiceModel) {
         CuisineEntity cuisineEntity = this.modelMapper.map(cuisineServiceModel, CuisineEntity.class);
+        cuisineEntity.setRecipes(new HashSet<>());
         CuisineEntity created = this.cuisineRepository.saveAndFlush(cuisineEntity);
         return this.modelMapper.map(created, CuisineServiceModel.class);
     }

@@ -12,7 +12,7 @@
 
         <div class="input-container">
             <label for="file-input" id="file-label">Select Image</label>
-            <input type="file" accept="image/*" class="form-control" name="recipeImage" id="file-input"
+            <input formControlName="recipeImage" type="file" accept="image/*" class="form-control" name="recipeImage" id="file-input"
                 (change)="selectFileHandler($event)">
         </div>
 
@@ -27,7 +27,7 @@
         <div class="select-menus-container">
             <div class="input-container">
                 <select formControlName="category" id="categories" class="form-control">
-                    <option value="" selected disabled >Select Category</option>
+                    <option value="" disabled selected>Select Category</option>
                     <option *ngFor="let category of categories" [ngValue]="category.toUpperCase()">{{category}}</option>
                 </select>
             </div>

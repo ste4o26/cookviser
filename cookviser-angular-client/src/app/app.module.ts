@@ -11,8 +11,8 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { AuthInterceptor } from './interceptor/auth.interceptor';
 import { RatingModule } from 'ng-starrating';
-// import { NgxSpinnerModule } from 'ngx-spinner';
 import { LoadInterceptor } from './interceptor/load.interceptor';
+import { CuisineModule } from './cuisine/cuisine.module';
 
 @NgModule({
   declarations: [
@@ -27,7 +27,7 @@ import { LoadInterceptor } from './interceptor/load.interceptor';
     UserModule,
     AuthModule,
     RatingModule,
-    // NgxSpinnerModule
+    CuisineModule
   ],
 
   providers: [

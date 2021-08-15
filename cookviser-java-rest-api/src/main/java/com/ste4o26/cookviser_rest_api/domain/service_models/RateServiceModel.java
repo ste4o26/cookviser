@@ -7,7 +7,6 @@ import lombok.*;
 @Data
 public class RateServiceModel extends BaseServiceModel {
     private int rateValue;
-
     private UserServiceModel user;
 
     @ToString.Exclude

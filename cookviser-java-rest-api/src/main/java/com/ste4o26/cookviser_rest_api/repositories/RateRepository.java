@@ -8,6 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface RateRepository extends JpaRepository<RateEntity, String> {
-
     Optional<RateEntity> findByUserIdAndRecipeId(String userId, String recipeId);
 }

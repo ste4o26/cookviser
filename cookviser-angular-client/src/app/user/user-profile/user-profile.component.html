@@ -1,4 +1,3 @@
-<!-- {{user | json}} -->
 <main class="user-profile-main" *ngIf="user!=null">
     <header class="main-header">
         <form #profileImageUpdate="ngForm" (ngSubmit)="submitImageHandler();" enctype="multipart/form-data"
@@ -7,8 +6,8 @@
                 <img src="{{user.profileImageUrl}}" alt="Profile image">
                 <label for="profileImage" class="edit-icon-label"><i
                         class="fas fa-user-edit fa-lg edit-image-icon"></i></label>
-                <input ngModel #profileImageInput="ngModel" (change)="changeProfileImageHandler($event)" type="file" name="profileImage" id="profileImage"
-                    required hidden>
+                <input ngModel #profileImageInput="ngModel" (change)="changeProfileImageHandler($event)" type="file"
+                    name="profileImage" id="profileImage" required hidden>
             </div>
 
             <button [ngClass]="{'invalid': profileImageUpdate.invalid === true}" [disabled]="profileImageUpdate.invalid"
@@ -31,7 +30,7 @@
                 <p class="control-name">Email</p>
                 <label for="email" class="control-label"><i class="fas fa-user-edit fa-lg edit-icon"></i></label>
                 <input [ngModel]="user.email" #emailInput="ngModel" type="text" name="email" class="form-control"
-                    id="email" required  pattern="[a-zA-Z0-9._-]{3,}@[a-zA-Z0-9.-]{3,}\.[a-zA-Z]{2,4}" autofocus="false">
+                    id="email" required pattern="[a-zA-Z0-9._-]{3,}@[a-zA-Z0-9.-]{3,}\.[a-zA-Z]{2,4}" autofocus="false">
             </div>
 
             <div class="input-container description-container">

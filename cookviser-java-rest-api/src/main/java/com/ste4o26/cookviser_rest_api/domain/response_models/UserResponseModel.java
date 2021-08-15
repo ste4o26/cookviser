@@ -1,17 +1,12 @@
 package com.ste4o26.cookviser_rest_api.domain.response_models;
 
-import com.ste4o26.cookviser_rest_api.domain.service_models.RecipeServiceModel;
-import com.ste4o26.cookviser_rest_api.domain.service_models.UserRoleServiceModel;
 import lombok.*;
-
-import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class UserResponseModel {
-    private String id;
+public class UserResponseModel extends BaseResponseModel{
     private String username;
     private String email;
     private String profileImageUrl;
@@ -31,8 +26,4 @@ public class UserResponseModel {
     private Set<RecipeResponseModel> myCookedRecipes;
 
     private double overallRating;
-
-//    @EqualsAndHashCode.Exclude
-//    @ToString.Exclude
-//    private Set<RateResponseModel> rates;
 }

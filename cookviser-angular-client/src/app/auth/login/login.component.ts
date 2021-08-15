@@ -1,12 +1,12 @@
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { pipe, Subscription } from 'rxjs';
-import { first } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 import { NotificationService } from 'src/app/shered/notification.service';
 import { AuthService } from '../auth.service';
 import { IUserLogin } from '../interface/user-login.interface';
 import { IUser } from '../interface/user.interface';
+import { ConstantMessages } from '../../shered/constants'
 
 @Component({
   selector: 'app-login',
@@ -26,21 +26,21 @@ export class LoginComponent implements OnInit, OnDestroy {
       .subscribe(
         (response: HttpResponse<IUser>) => {
           if (response.body === null) {
-            this.notificationService.showError('Something went wrong! Please try again.');
+            this.notificationService.showError(ConstantMessages.PLEASE_TRY_AGAIN_ERROR);
             return;
           }
-          
+
           const token = response.headers.get('jwtToken');
-          if(token === null){
-            this.notificationService.showError('Something went wrong! Please try again.');
-            return
+          if (token === null) {
+            this.notificationService.showError(ConstantMessages.PLEASE_TRY_AGAIN_ERROR);
+            return;
           }
 
           this.authService.setUserToken(token);
           this.authService.setLoggedInUsername(response.body?.username);
           this.authService.setLoggedInUser(response.body);
 
-          this.notificationService.showSucces('You have logged in.')
+          this.notificationService.showSucces(ConstantMessages.LOG_IN_SUCCES);
           this.router.navigateByUrl('/home');
         }, (errorResponse: HttpErrorResponse) => this.notificationService.showError(errorResponse.error.message));
 

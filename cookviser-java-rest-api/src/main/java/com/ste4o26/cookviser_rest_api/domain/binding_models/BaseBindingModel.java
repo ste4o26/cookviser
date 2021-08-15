@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class CuisineBindingModel extends BaseBindingModel {
-    private String name;
-    private String imageThumbnailUrl;
+public abstract class BaseBindingModel {
+    private String id;
 }

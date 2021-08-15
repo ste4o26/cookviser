@@ -10,8 +10,7 @@ import { IRecipeCard } from '../interface/recipe-card.interface';
 export class RecipeCardComponent {
 
   @Input()
-  public recipe: IRecipeCard = {id: '', name: '', publisherUsername: '', recipeThumbnail: ''};
-
-  constructor() {
-  }
+  public recipe: IRecipeCard = { id: '', name: '', publisherUsername: '', recipeThumbnail: '' };
+  
+  public constructor() { }
 }

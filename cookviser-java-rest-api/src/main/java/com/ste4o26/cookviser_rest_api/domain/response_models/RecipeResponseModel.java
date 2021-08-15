@@ -8,8 +8,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class RecipeResponseModel {
-    private String id;
+public class RecipeResponseModel extends BaseResponseModel{
     private String name;
     private String description;
     private String recipeThumbnail;
@@ -19,11 +18,11 @@ public class RecipeResponseModel {
     private Set<String> ingredients;
     private String publisherUsername;
     private CuisineResponseModel cuisine;
+    private double overallRating;
 
     @EqualsAndHashCode.Exclude
     private Set<StepResponseModel> steps;
 
     @EqualsAndHashCode.Exclude
     private Set<UserResponseModel> cookedBy;
-    private double overallRating;
 }

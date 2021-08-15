@@ -2,8 +2,6 @@ package com.ste4o26.cookviser_rest_api.domain.service_models;
 
 import lombok.*;
 import org.modelmapper.ModelMapper;
-
-import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor

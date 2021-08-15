@@ -7,7 +7,6 @@ import com.ste4o26.cookviser_rest_api.domain.service_models.UserServiceModel;
 import com.ste4o26.cookviser_rest_api.exceptions.*;
 import com.ste4o26.cookviser_rest_api.init.ErrorMessages;
 import com.ste4o26.cookviser_rest_api.services.interfaces.CloudService;
-import com.ste4o26.cookviser_rest_api.services.interfaces.RateService;
 import com.ste4o26.cookviser_rest_api.services.interfaces.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.management.relation.RoleNotFoundException;
-import java.io.IOException;
-import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,14 +31,12 @@ import static org.springframework.http.HttpStatus.*;
 public class UserController {
     private final UserService userService;
     private final ModelMapper modelMapper;
-    private final RateService rateService;
     private final CloudService cloudService;
 
     @Autowired
-    public UserController(UserService userService, ModelMapper modelMapper, RateService rateService, CloudService cloudService) {
+    public UserController(UserService userService, ModelMapper modelMapper, CloudService cloudService) {
         this.userService = userService;
         this.modelMapper = modelMapper;
-        this.rateService = rateService;
         this.cloudService = cloudService;
     }
 
@@ -65,11 +60,10 @@ public class UserController {
         UserServiceModel userServiceModel = this.userService.fetchByUsername(username);
 
         UserResponseModel userResponseModel = this.modelMapper.map(userServiceModel, UserResponseModel.class);
-
         return new ResponseEntity<>(userResponseModel, OK);
     }
 
-    @PreAuthorize("hasAuthority('UPDATE')")
+    @PreAuthorize("hasAnyAuthority('UPDATE', 'DELETE')")
     @GetMapping("all")
     public ResponseEntity<List<UserResponseModel>> getAll() {
         List<UserServiceModel> allUsers = this.userService.fetchAll();
@@ -82,7 +76,7 @@ public class UserController {
     }
 
     @PutMapping("/update-profile-image")
-    public ResponseEntity<UserResponseModel> postUpdateUserProfileImage(
+    public ResponseEntity<UserResponseModel> putUpdateUserProfileImage(
             @RequestPart("profileImage") MultipartFile profileImage,
             @RequestParam("username") String username) throws ImageNotUploadedException, ImageNotPresentException {
         if (profileImage == null || profileImage.isEmpty()) {
@@ -101,7 +95,7 @@ public class UserController {
     }
 
     @PutMapping("/update-profile")
-    public ResponseEntity<UserResponseModel> postUpdateUserProfile(
+    public ResponseEntity<UserResponseModel> putUpdateUserProfile(
             @RequestBody UserBindingModel userBindingModel,
             @RequestParam("editorUsername") String editorUsername) throws UserNotAuthorizedException {
         UserServiceModel editor = this.userService.fetchByUsername(editorUsername);
@@ -124,8 +118,9 @@ public class UserController {
     }
 
 
+    @PreAuthorize("hasAnyAuthority('UPDATE', 'DELETE')")
     @PutMapping("/promote")
-    public ResponseEntity<UserResponseModel> promote(@RequestBody String username)
+    public ResponseEntity<UserResponseModel> putPromote(@RequestBody String username)
             throws UsernameNotFoundException, RoleNotFoundException, PromotionDeniedException {
         if (username == null || username.trim().isEmpty()) {
             throw new UsernameNotFoundException(String.format(USERNAME_NOT_EXISTS, username));
@@ -138,8 +133,9 @@ public class UserController {
         return new ResponseEntity<>(responseModel, OK);
     }
 
+    @PreAuthorize("hasAnyAuthority('UPDATE', 'DELETE')")
     @PutMapping("/demote")
-    public ResponseEntity<UserResponseModel> demote(@RequestBody String username)
+    public ResponseEntity<UserResponseModel> putDemote(@RequestBody String username)
             throws UsernameNotFoundException, RoleNotFoundException, DemotionDeniedException {
         if (username == null || username.trim().isEmpty()) {
             throw new UsernameNotFoundException(String.format(USERNAME_NOT_EXISTS, username));

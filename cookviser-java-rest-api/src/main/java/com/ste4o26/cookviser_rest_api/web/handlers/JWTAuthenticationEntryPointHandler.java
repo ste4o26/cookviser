@@ -2,8 +2,6 @@ package com.ste4o26.cookviser_rest_api.web.handlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ste4o26.cookviser_rest_api.domain.HttpResponseModel;
-import com.ste4o26.cookviser_rest_api.init.ErrorMessages;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.stereotype.Component;
@@ -12,7 +10,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Map;
 
 import static com.ste4o26.cookviser_rest_api.init.ErrorMessages.*;
 import static org.springframework.http.HttpStatus.*;

@@ -5,6 +5,7 @@ import { FooterComponent } from './footer/footer.component';
 import { AppRoutingModule } from '../app-routing.module';
 import { SimpleNotificationsComponent, SimpleNotificationsModule } from 'angular2-notifications';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
   exports: [
     HeaderComponent,
     FooterComponent,
-    SimpleNotificationsComponent
+    SimpleNotificationsComponent,
+    InfiniteScrollModule
   ]
 })
 export class SheredModule { }

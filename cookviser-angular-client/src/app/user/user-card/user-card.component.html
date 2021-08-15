@@ -1,4 +1,4 @@
-<article  (mouseenter)="mouseEnterHandler(contentElement)" (mouseleave)="mouseLeaveHandler(contentElement)" class="card">
+<article (mouseenter)="mouseEnterHandler(contentElement)" (mouseleave)="mouseLeaveHandler(contentElement)" class="card">
     <div class="card-image-container">
         <img class="card-image" src="{{user.profileImageUrl}}" alt="Profile picture">
     </div>
@@ -8,7 +8,7 @@
         <p id="username">{{user.username}}</p>
         <p>Overall Rating: {{user.overallRating.toPrecision(2)}}</p>
     </header>
-    
+
     <main #contentElement class="card-content hidden fas">
         <h4>About me</h4>
         <p>{{user.description}}</p>

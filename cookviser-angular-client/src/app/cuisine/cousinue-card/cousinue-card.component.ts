@@ -11,13 +11,13 @@ export class CousinueCardComponent {
   @Input()
   public cuisine: ICuisine = {id: '', name: '', imageThumbnailUrl: '' };
 
-  constructor() { }
+  public constructor() { }
 
-  mouseEnterHandler(headerElement: HTMLElement): void {
+  public mouseEnterHandler(headerElement: HTMLElement): void {
     headerElement.classList.remove("hidden");
   }
 
-  mouseLeaveHandler(headerElement: HTMLElement): void {
+  public mouseLeaveHandler(headerElement: HTMLElement): void {
     headerElement.classList.add("hidden");
   }
 }

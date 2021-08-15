@@ -7,24 +7,18 @@ import { AppRoutingModule } from '../app-routing.module';
 import { RatingModule } from 'ng-starrating';
 
 import { RecipeCardComponent } from './recipe-card/recipe-card.component';
-import { CousinueCardComponent } from './cousinue-card/cousinue-card.component';
 import { RecipeDetailsComponent } from './recipe-details/recipe-details.component';
 import { CreateRecipeComponent } from './create-recipe/create-recipe.component';
-import { CuisineListComponent } from './cuisine-list/cuisine-list.component';
 import { RecipeListComponent } from './recipe-list/recipe-list.component';
-import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { NgxSpinnerModule } from 'ngx-spinner';
-import { CreateCuisineComponent } from './create-cuisine/create-cuisine.component';
+import { CuisineModule } from '../cuisine/cuisine.module';
+import { SheredModule } from '../shered/shered.module';
 
 @NgModule({
   declarations: [
     RecipeCardComponent,
-    CousinueCardComponent,
     RecipeDetailsComponent,
     CreateRecipeComponent,
-    CuisineListComponent,
-    RecipeListComponent,
-    CreateCuisineComponent
+    RecipeListComponent
   ],
   imports: [
     CommonModule,
@@ -33,13 +27,10 @@ import { CreateCuisineComponent } from './create-cuisine/create-cuisine.componen
     FormsModule,
     ReactiveFormsModule,
     RatingModule,
-    InfiniteScrollModule,
-    NgxSpinnerModule
+    CuisineModule,
+    SheredModule
   ],
-  exports: [
-    RecipeCardComponent,
-    CousinueCardComponent
-  ],
+  exports: [RecipeCardComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 

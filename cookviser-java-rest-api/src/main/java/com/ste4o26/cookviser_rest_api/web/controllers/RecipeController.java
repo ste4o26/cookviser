@@ -9,14 +9,14 @@ import com.ste4o26.cookviser_rest_api.domain.service_models.CuisineServiceModel;
 import com.ste4o26.cookviser_rest_api.domain.service_models.RateServiceModel;
 import com.ste4o26.cookviser_rest_api.domain.service_models.RecipeServiceModel;
 import com.ste4o26.cookviser_rest_api.exceptions.*;
-import com.ste4o26.cookviser_rest_api.init.ErrorMessages;
 import com.ste4o26.cookviser_rest_api.services.interfaces.*;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
@@ -57,10 +57,10 @@ public class RecipeController {
     }
 
     @GetMapping("/next-by-cuisine")
-    public ResponseEntity<List<RecipeResponseModel>> getAllByCuisine(@RequestParam("cuisineName") String cuisineName,
-                                                                     @RequestParam("recipesCount") Integer recipesCount) throws CuisineDontExistsException {
+    public ResponseEntity<List<RecipeResponseModel>> getAllByCuisine(
+            @RequestParam("cuisineName") String cuisineName, @RequestParam("recipesCount") Integer recipesCount)
+            throws CuisineDontExistsException {
         CuisineServiceModel cuisineServiceModel = this.cuisineService.fetchByName(cuisineName);
-
         List<RecipeServiceModel> recipesByCuisine = this.recipeService.fetchNextByCuisine(cuisineServiceModel, recipesCount);
 
         List<RecipeResponseModel> collect = recipesByCuisine.stream()
@@ -90,11 +90,11 @@ public class RecipeController {
             throws SearchValueNotProvidedException {
         List<RecipeServiceModel> recipeServiceModels = this.recipeService.fetchAllContains(searchValue);
 
-        List<RecipeResponseModel> recipeResponseModels = recipeServiceModels.stream()
+        List<RecipeResponseModel> collect = recipeServiceModels.stream()
                 .map(recipe -> this.modelMapper.map(recipe, RecipeResponseModel.class))
                 .collect(Collectors.toList());
 
-        return new ResponseEntity<>(recipeResponseModels, OK);
+        return new ResponseEntity<>(collect, OK);
     }
 
     @GetMapping("/best-four")
@@ -112,21 +112,22 @@ public class RecipeController {
     public ResponseEntity<List<RecipeResponseModel>> getAll() {
         List<RecipeServiceModel> recipeServiceModels = this.recipeService.fetchAll();
 
-        List<RecipeResponseModel> allRecipes = recipeServiceModels.stream()
+        List<RecipeResponseModel> collect = recipeServiceModels.stream()
                 .map(recipeServiceModel -> this.modelMapper.map(recipeServiceModel, RecipeResponseModel.class))
                 .collect(Collectors.toList());
 
-        return new ResponseEntity<>(allRecipes, OK);
+        return new ResponseEntity<>(collect, OK);
     }
 
     @GetMapping("/all-categories")
     public ResponseEntity<List<String>> getAllCategories() {
-        List<String> categories = Arrays.stream(CategoryName.values()).map(Enum::name).collect(Collectors.toList());
-        return new ResponseEntity<>(categories, OK);
+        List<String> collect = Arrays.stream(CategoryName.values()).map(Enum::name).collect(Collectors.toList());
+        return new ResponseEntity<>(collect, OK);
     }
 
+    @PreAuthorize("hasAuthority('WRITE')")
     @PostMapping("/create")
-    public ResponseEntity<RecipeResponseModel> postAdd(
+    public ResponseEntity<RecipeResponseModel> postCreate(
             @RequestBody RecipeBindingModel recipeBindingModel, Principal principal)
             throws UserNotAuthenticatedException, ImageNotPresentException {
         RecipeServiceModel recipeServiceModel = this.modelMapper.map(recipeBindingModel, RecipeServiceModel.class);
@@ -138,10 +139,10 @@ public class RecipeController {
         this.userService.addRecipeToMyRecipes(createdRecipe.getPublisher(), createdRecipe);
 
         RecipeResponseModel recipeResponseModel = this.modelMapper.map(createdRecipe, RecipeResponseModel.class);
-
-        return new ResponseEntity<>(recipeResponseModel, OK);
+        return new ResponseEntity<>(recipeResponseModel, CREATED);
     }
 
+    @PreAuthorize("hasAuthority('WRITE')")
     @PostMapping("/upload-recipe-image")
     public ResponseEntity<RecipeResponseModel> postUploadRecipeImage(
             @RequestPart("image") MultipartFile multipartFile,
@@ -157,20 +158,20 @@ public class RecipeController {
         RecipeServiceModel updatedRecipe = this.recipeService.update(recipeServiceModel);
 
         RecipeResponseModel recipeResponseModel = this.modelMapper.map(updatedRecipe, RecipeResponseModel.class);
-
-        return new ResponseEntity<>(recipeResponseModel, OK);
+        return new ResponseEntity<>(recipeResponseModel, CREATED);
     }
 
+    @PreAuthorize("hasAuthority('WRITE')")
     @PostMapping("/rate")
     public ResponseEntity<RateResponseModel> postRate(@RequestBody RateBindingModel rateBindingModel) {
         RateServiceModel rateServiceModel = this.modelMapper.map(rateBindingModel, RateServiceModel.class);
-
         RateServiceModel rate = this.rateService.rate(rateServiceModel);
 
         RateResponseModel rateResponseModel = this.modelMapper.map(rate, RateResponseModel.class);
-        return new ResponseEntity<>(rateResponseModel, OK);
+        return new ResponseEntity<>(rateResponseModel, CREATED);
     }
 
+    @PreAuthorize("hasAuthority('DELETE')")
     @DeleteMapping("/delete")
     public ResponseEntity<RecipeResponseModel> delete(@RequestParam("recipeId") String recipeId) throws RecipeNotExistsException {
         RecipeServiceModel recipeServiceModel = this.recipeService.deleteById(recipeId);

@@ -3,7 +3,6 @@ package com.ste4o26.cookviser_rest_api.services;
 import com.ste4o26.cookviser_rest_api.domain.entities.UserRoleEntity;
 import com.ste4o26.cookviser_rest_api.domain.entities.enums.RoleName;
 import com.ste4o26.cookviser_rest_api.domain.service_models.UserRoleServiceModel;
-import com.ste4o26.cookviser_rest_api.init.ErrorMessages;
 import com.ste4o26.cookviser_rest_api.repositories.RoleRepository;
 import com.ste4o26.cookviser_rest_api.services.interfaces.RoleService;
 import org.modelmapper.ModelMapper;

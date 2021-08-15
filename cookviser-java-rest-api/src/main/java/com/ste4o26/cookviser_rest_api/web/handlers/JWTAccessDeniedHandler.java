@@ -2,7 +2,6 @@ package com.ste4o26.cookviser_rest_api.web.handlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ste4o26.cookviser_rest_api.domain.HttpResponseModel;
-import com.ste4o26.cookviser_rest_api.init.ErrorMessages;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;

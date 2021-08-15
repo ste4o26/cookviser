@@ -76,14 +76,62 @@ public class RecipeServiceImpl implements RecipeService {
         return this.modelMapper.map(recipeEntity, RecipeServiceModel.class);
     }
 
-    //    TODO may need to add orphanal removal to the entity or something like that!
     @Override
     public RecipeServiceModel deleteById(String id) throws RecipeNotExistsException {
         RecipeServiceModel recipeServiceModel = this.fetchById(id);
-
         this.recipeRepository.deleteById(id);
-
         return recipeServiceModel;
+    }
+
+    @Override
+    public RecipeServiceModel update(RecipeServiceModel recipeServiceModel) {
+        RecipeEntity recipeEntity = this.modelMapper.map(recipeServiceModel, RecipeEntity.class);
+        RecipeEntity updatedRecipe = this.recipeRepository.saveAndFlush(recipeEntity);
+        return this.modelMapper.map(updatedRecipe, RecipeServiceModel.class);
+    }
+
+    @Override
+    public List<RecipeServiceModel> fetchBestFourOrderByRates() {
+        List<RecipeServiceModel> allRecipes = this.fetchAll();
+
+        for (RecipeServiceModel recipe : allRecipes) {
+            double currentRecipeOverallRating = this.rateService.calculateRecipeOverallRate(recipe);
+            recipe.setOverallRating(currentRecipeOverallRating);
+        }
+
+        return allRecipes.stream()
+                .sorted((first, second) -> Double.compare(second.getOverallRating(), first.getOverallRating()))
+                .limit(4)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<RecipeServiceModel> fetchAll() {
+        List<RecipeEntity> allRecipes = this.recipeRepository.findAll();
+        return RecipeServiceModel.mapFrom(allRecipes, this.modelMapper);
+    }
+
+    @Override
+    public List<RecipeServiceModel> fetchNextByCuisine(CuisineServiceModel cuisineServiceModel, Integer recipesCount) {
+        CuisineEntity cuisineEntity = this.modelMapper.map(cuisineServiceModel, CuisineEntity.class);
+        List<RecipeEntity> allByCuisine = this.recipeRepository.findAllByCuisine(cuisineEntity, PageRequest.of(0, recipesCount));
+        return RecipeServiceModel.mapFrom(allByCuisine, this.modelMapper);
+    }
+
+    @Override
+    public List<RecipeServiceModel> fetchNextRecipes(Integer recipesCount) {
+        List<RecipeEntity> nextPage = this.recipeRepository.findAll(PageRequest.of(0, recipesCount)).toList();
+        return RecipeServiceModel.mapFrom(nextPage, this.modelMapper);
+    }
+
+    @Override
+    public List<RecipeServiceModel> fetchAllContains(String searchValue) throws SearchValueNotProvidedException {
+        if (searchValue == null || searchValue.trim().isEmpty()) {
+            throw new SearchValueNotProvidedException(BLANK_SEARCH_VALUE_MESSAGE);
+        }
+
+        List<RecipeEntity> allBySearchedValue = this.recipeRepository.findAllByNameContaining(searchValue);
+        return RecipeServiceModel.mapFrom(allBySearchedValue, modelMapper);
     }
 
     @Override
@@ -101,83 +149,4 @@ public class RecipeServiceImpl implements RecipeService {
 
         return recipeServiceModel;
     }
-
-    @Override
-    public List<RecipeServiceModel> fetchAllContains(String searchValue) throws SearchValueNotProvidedException {
-        if (searchValue == null || searchValue.trim().isEmpty()) {
-            throw new SearchValueNotProvidedException(BLANK_SEARCH_VALUE_MESSAGE);
-        }
-
-        List<RecipeEntity> allBySearchedValue = this.recipeRepository.findAllByNameContaining(searchValue);
-        return RecipeServiceModel.mapFrom(allBySearchedValue, modelMapper);
-    }
-
-    @Override
-    public List<RecipeServiceModel> fetchAllByCategory(CategoryName category) {
-        List<RecipeEntity> allByCategory = this.recipeRepository.findAllByCategory(category);
-        return RecipeServiceModel.mapFrom(allByCategory, modelMapper);
-    }
-
-    @Override
-    public List<RecipeServiceModel> fetchAllSortedByRate() {
-        List<RecipeEntity> allOrderedByRates = this.recipeRepository.findAllOrderedByRates();
-
-        return allOrderedByRates.stream()
-                .map(recipe -> this.modelMapper.map(recipe, RecipeServiceModel.class))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<RecipeServiceModel> fetchBestFourOrderByRates() {
-        List<RecipeServiceModel> allRecipes = this.fetchAll();
-
-        for (RecipeServiceModel recipe : allRecipes) {
-            double currentRecipeOverallRating = this.rateService.calculateRecipeOverallRate(recipe);
-            recipe.setOverallRating(currentRecipeOverallRating);
-        }
-
-        return allRecipes.stream()
-                .sorted((first, second) -> {
-                    if (second.getOverallRating() > first.getOverallRating()) {
-                        return 1;
-                    } else if (second.getOverallRating() < first.getOverallRating()) {
-                        return -1;
-                    } else {
-                        return 0;
-                    }
-                })
-                .limit(4)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public RecipeServiceModel update(RecipeServiceModel recipeServiceModel) {
-        RecipeEntity recipeEntity = this.modelMapper.map(recipeServiceModel, RecipeEntity.class);
-        RecipeEntity updatedRecipe = this.recipeRepository.saveAndFlush(recipeEntity);
-
-        return this.modelMapper.map(updatedRecipe, RecipeServiceModel.class);
-    }
-
-    @Override
-    public List<RecipeServiceModel> fetchAll() {
-        List<RecipeEntity> allRecipes = this.recipeRepository.findAll();
-
-        return RecipeServiceModel.mapFrom(allRecipes, this.modelMapper);
-    }
-
-    @Override
-    public List<RecipeServiceModel> fetchNextByCuisine(CuisineServiceModel cuisineServiceModel, Integer recipesCount) {
-        CuisineEntity cuisineEntity = this.modelMapper.map(cuisineServiceModel, CuisineEntity.class);
-        List<RecipeEntity> allByCuisine = this.recipeRepository.findAllByCuisine(cuisineEntity, PageRequest.of(0, recipesCount));
-
-        return RecipeServiceModel.mapFrom(allByCuisine, this.modelMapper);
-    }
-
-    @Override
-    public List<RecipeServiceModel> fetchNextRecipes(Integer recipesCount) {
-        List<RecipeEntity> nextPage = this.recipeRepository.findAll(PageRequest.of(0, recipesCount)).toList();
-        return RecipeServiceModel.mapFrom(nextPage, this.modelMapper);
-    }
-
-
 }

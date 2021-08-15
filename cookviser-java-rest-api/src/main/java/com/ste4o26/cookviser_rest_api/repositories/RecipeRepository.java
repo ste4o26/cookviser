@@ -12,16 +12,7 @@ import java.util.List;
 
 @Repository
 public interface RecipeRepository extends JpaRepository<RecipeEntity, String> {
-
     List<RecipeEntity> findAllByNameContaining(String searchValue);
-
-    List<RecipeEntity> findAllByCategory(CategoryName category);
-
-    @Query("SELECT r FROM recipes AS r " +
-            "INNER JOIN rates AS ra " +
-            "ON r.id = ra.recipe.id " +
-            "ORDER BY ra.rateValue")
-    List<RecipeEntity> findAllOrderedByRates();
 
     List<RecipeEntity> findAllByCuisine(CuisineEntity cuisine, Pageable pageable);
 }

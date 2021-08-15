@@ -20,21 +20,17 @@ public interface RecipeService {
 
     RecipeServiceModel deleteById(String id) throws RecipeNotExistsException;
 
-    RecipeServiceModel addToCooked(String recipeId, Principal principal) throws UserNotAuthenticatedException, RecipeNotExistsException;
-
-    List<RecipeServiceModel> fetchAllContains(String searchValue) throws SearchValueNotProvidedException;
-
-    List<RecipeServiceModel> fetchAllByCategory(CategoryName category);
-
-    List<RecipeServiceModel> fetchAllSortedByRate();
+    RecipeServiceModel update(RecipeServiceModel recipeServiceModel);
 
     List<RecipeServiceModel> fetchBestFourOrderByRates();
-
-    RecipeServiceModel update(RecipeServiceModel recipeServiceModel);
 
     List<RecipeServiceModel> fetchAll();
 
     List<RecipeServiceModel> fetchNextByCuisine(CuisineServiceModel cuisine, Integer recipesCount);
 
     List<RecipeServiceModel> fetchNextRecipes(Integer recipesCount);
+
+    List<RecipeServiceModel> fetchAllContains(String searchValue) throws SearchValueNotProvidedException;
+
+    RecipeServiceModel addToCooked(String recipeId, Principal principal) throws UserNotAuthenticatedException, RecipeNotExistsException;
 }

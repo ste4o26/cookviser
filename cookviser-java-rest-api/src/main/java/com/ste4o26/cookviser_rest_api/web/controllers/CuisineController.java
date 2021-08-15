@@ -9,10 +9,9 @@ import com.ste4o26.cookviser_rest_api.services.interfaces.CuisineService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -56,6 +55,7 @@ public class CuisineController {
         return new ResponseEntity<>(collect, OK);
     }
 
+    @PreAuthorize("hasAnyAuthority('UPDATE, DELETE')")
     @PostMapping("/create")
     public ResponseEntity<CuisineResponseModel> create(
             @RequestPart("cuisineImage") MultipartFile multipartFile,
@@ -67,11 +67,11 @@ public class CuisineController {
 
         String imageUrl = this.cloudService.uploadImage(multipartFile);
 
-        CuisineServiceModel cuisineServiceModel = new CuisineServiceModel(name, imageUrl, new HashSet<>());
+        CuisineServiceModel cuisineServiceModel = new CuisineServiceModel(name, imageUrl);
         CuisineServiceModel createdCuisine = this.cuisineService.persist(cuisineServiceModel);
         CuisineResponseModel cuisineResponseModel = this.modelMapper.map(createdCuisine, CuisineResponseModel.class);
 
-        return new ResponseEntity<>(cuisineResponseModel, OK);
+        return new ResponseEntity<>(cuisineResponseModel, CREATED);
     }
 
 }

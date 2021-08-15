@@ -35,7 +35,6 @@
         </section>
     </article>
 
-    <!-- <article class="cooking-details"> -->
     <section *ngIf="isCooking" class="cooking-section">
         <div class="cooking-description-container">
             <p>Category: {{recipe?.category}}</p>
@@ -57,10 +56,9 @@
             <div class="steps-container">
                 <strong>Preparation Steps:</strong>
                 <ul class="steps-list">
-                    <li *ngFor="let step of recipe?.steps; let i = index"  class="step-item">
+                    <li *ngFor="let step of recipe?.steps; let i = index" class="step-item">
                         <span class="step-number">{{step?.number}}</span>
                         <p *ngIf="recipe?.steps.length > i + 1" class="verticle-line"></p>
-                        <!-- <span class="step-content">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam facilis eligendi dolorem fuga molestiae sed voluptatem, tempore ad maxime officia deleniti natus praesentium dolore labore eos non debitis. Veniam, corporis.</span> -->
                         <span class="step-content">{{step?.content}}</span>
                     </li>
                 </ul>
@@ -74,5 +72,4 @@
 
         <button (click)="toggleIsCookingHandler()">View Description</button>
     </section>
-    <!-- </article> -->
 </main>

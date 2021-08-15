@@ -27,8 +27,6 @@ public class ApplicationCloudConfiguration {
         configurations.put("api_secret", this.apiSecret);
         configurations.put("cloud_name", this.cloudName);
 
-        int b = 5;
-
         return new Cloudinary(configurations);
     }
 }

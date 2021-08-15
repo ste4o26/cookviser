@@ -2,15 +2,14 @@ import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, pipe, Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators'
 
-import { CuisineService } from '../recipe/service/cuisine.service';
 import { RecipeService } from '../recipe/service/recipe.service';
-
 import { IRecipeCard } from '../recipe/interface/recipe-card.interface';
-import { ICuisine } from '../recipe/interface/cuisine.interface';
 import { IUserCard } from '../user/user-card.interface';
 import { UserService } from '../user/user.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NotificationService } from '../shered/notification.service';
+import { CuisineService } from '../cuisine/service/cuisine.service';
+import { ICuisine } from '../cuisine/interface/cuisine.interface';
 
 @Component({
   selector: 'app-home',
@@ -28,7 +27,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     private cuisineService: CuisineService,
     private userService: UserService,
     private notificationService: NotificationService) { }
-
 
   private recipeSubsriber(): void {
     const recipes$: Subscription = this.recipeService
@@ -51,10 +49,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private userSubscriber(): void {
     const chefs$: Subscription = this.userService
       .fetchBestThreeChefs()
-      .subscribe((data: IUserCard[]) => {
-        this.bestChefs = data;
-        console.log(data);
-      },
+      .subscribe((data: IUserCard[]) => this.bestChefs = data,
         (errorResponse: HttpErrorResponse) => this.notificationService.showError(errorResponse.error.message));
 
     this.subscriptions.push(chefs$);

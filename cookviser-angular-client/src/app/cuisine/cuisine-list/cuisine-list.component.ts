@@ -28,5 +28,4 @@ export class CuisineListComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
-
 }

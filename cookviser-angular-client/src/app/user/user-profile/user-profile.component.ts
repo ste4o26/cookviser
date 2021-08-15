@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { IUser } from 'src/app/auth/interface/user.interface';
+import { ConstantMessages } from 'src/app/shered/constants';
 import { NotificationService } from 'src/app/shered/notification.service';
 import { UserService } from '../user.service';
 
@@ -20,7 +21,6 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   public user: IUser | null = null;
 
   public constructor(private userService: UserService,
-    private authService: AuthService,
     private router: Router,
     private notificationSercice: NotificationService,
     private activatedRoute: ActivatedRoute) { }
@@ -35,7 +35,6 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
   private loadUser(): void {
     this.getUsernameFromParams();
-    // const username: string = this.authService.getLoggedInUsername();
     const user$ = this.userService
       .fetchByUsername(this.username)
       .subscribe((response: HttpResponse<IUser>) => this.user = response.body,
@@ -45,7 +44,6 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   }
 
   private hasAnyUpdates(user: IUser): boolean {
-    // return user.username !== this.user?.username || user.email !== this.user?.email || user.description !== this.user?.description;
     return user.email !== this.user?.email || user.description !== this.user?.description;
   }
 
@@ -55,12 +53,12 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
   public submitImageHandler(): void {
     if (this.profileImage === null) {
-      this.notificationSercice.showError('Profile image is required!');
+      this.notificationSercice.showError(ConstantMessages.IMAGE_REQUIRED_ERROR);
       return;
     }
 
     if (this.user === null) {
-      this.notificationSercice.showError("Please Log In to continue!");
+      this.notificationSercice.showError(ConstantMessages.PLEASE_LOGIN_ERROR);
       return;
     }
 
@@ -72,49 +70,39 @@ export class UserProfileComponent implements OnInit, OnDestroy {
       .updateProfileImage(formData)
       .subscribe((response: HttpResponse<IUser>) => {
         this.user = response.body;
-        this.notificationSercice.showSucces('Profile image updated.');
+        this.notificationSercice.showSucces(ConstantMessages.PROFILE_IMAGE_UPDATED);
       }, (errorResponse: HttpErrorResponse) => this.notificationSercice.showError(errorResponse.error.message));
   }
 
   public submitDataHandler(user: IUser): void {
     if (!this.hasAnyUpdates(user)) {
-      this.notificationSercice.showError('You must change any of the fields to update your profile!');
+      this.notificationSercice.showError(ConstantMessages.CHANGES_ARE_REQUIRED_ERROR);
       return;
     }
 
-    this.userService.updateProfile(user, this.username)
+    const user$: Subscription = this.userService.updateProfile(user, this.username)
       .subscribe((response: HttpResponse<IUser>) => {
         if (response.body === null) {
-          this.notificationSercice.showError('Something went wrong please Re Log In!');
+          this.notificationSercice.showError(ConstantMessages.PLEASE_TRY_AGAIN_ERROR);
           return;
         }
         this.user = response.body;
         this.router.navigateByUrl(`/user/profile/${this.username}`);
-        this.notificationSercice.showSucces('Profile updated.');
+        this.notificationSercice.showSucces(ConstantMessages.PROFILE_UPDATED);
       }, (errorResponse: HttpErrorResponse) => {
         if (errorResponse.status >= 500) {
-          // TODO make an error page for all responses with >= 500 status!!!!
-          this.notificationSercice.showError('Sorry the problem is on our side. We are working on it. Please try again later.');
+          this.notificationSercice.showError(ConstantMessages.PLEASE_TRY_AGAIN_ERROR);
         }
 
         this.notificationSercice.showError(errorResponse.error.message);
       });
+
+    this.subscriptions.push(user$);
   }
 
   public ngOnInit(): void {
     this.loadUser();
   }
-
-  // ngDoCheck(): void {
-  //   // this.loadUser();
-  //   const olderUsername = this.username;
-  //   console.log(olderUsername)
-  //   this.getUsernameFromParams();
-  //   if (olderUsername !== this.username) {
-  //     this.loadUser();
-  //     this.router.navigateByUrl(`/user/profile/${this.username}`);
-  //   }
-  // }
 
   public ngOnDestroy(): void {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());

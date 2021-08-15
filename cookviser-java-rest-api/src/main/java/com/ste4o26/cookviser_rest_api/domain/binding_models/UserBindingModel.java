@@ -11,10 +11,9 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class UserBindingModel {
-    private String id;
+public class UserBindingModel extends BaseBindingModel {
     private String username;
-    private String  email;
+    private String email;
     private String description;
     private String profileImageUrl;
     private UserRoleServiceModel role;

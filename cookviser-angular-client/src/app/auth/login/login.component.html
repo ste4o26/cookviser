@@ -1,25 +1,25 @@
 <main class="login-main">
     <form #loginForm="ngForm" (ngSubmit)="submitHandler(loginForm.value)" class="form-group">
         <h2>Log In</h2>
-        
+
         <div class="input-container">
             <span class="icon-wrapper">
                 <i class="fas fa-user"></i>
             </span>
-            <input ngModel #usernameInput="ngModel" required minlength="5" 
-            name="username" class="form-control" type="text" placeholder="Username" autocomplete="off">
-            <!-- <p *ngIf="usernameInput.touched && usernameInput.invalid">Username must be at least 5 characters</p> -->
+            <input ngModel #usernameInput="ngModel" required minlength="5" name="username" class="form-control"
+                type="text" placeholder="Username" autocomplete="off">
         </div>
 
         <div class="input-container">
             <span class="icon-wrapper">
                 <i class="fas fa-unlock-alt"></i>
             </span>
-            <input ngModel #passwordInput="ngModel" required minlength="6"
-             name="password" class="form-control" type="password" placeholder="Password" autocomplete="off">
+            <input ngModel #passwordInput="ngModel" required minlength="6" name="password" class="form-control"
+                type="password" placeholder="Password" autocomplete="off">
         </div>
 
-        <button [ngClass]="{'invalid': loginForm.invalid === true}" [disabled]="loginForm.invalid" class="login-button">Login</button>
+        <button [ngClass]="{'invalid': loginForm.invalid === true}" [disabled]="loginForm.invalid"
+            class="login-button">Login</button>
     </form>
 
     <footer class="navigation-footer">
@@ -27,4 +27,3 @@
         <a routerLink="/auth/register">Join Us</a>
     </footer>
 </main>
-

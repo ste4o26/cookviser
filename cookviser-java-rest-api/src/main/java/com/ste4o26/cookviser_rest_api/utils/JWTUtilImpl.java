@@ -103,11 +103,7 @@ public class JWTUtilImpl implements JWTUtil {
     @Override
     public boolean isValidToken(String username, String token) {
         JWTVerifier jwtVerifier = this.getJWTVerifier();
-        if ((username == null || username.trim().isEmpty()) && this.isTokenExpired(token, jwtVerifier)) {
-            return false;
-        }
-
-        return true;
+        return (username != null && !username.trim().isEmpty()) || !this.isTokenExpired(token, jwtVerifier);
     }
 
     @Override
